@@ -8,12 +8,12 @@ function App() {
   const [count, setCount] = useState(0)
   const [i, ia] = useState(0)
   return (
-    <div>
+    <BrowserRouter>
       HELLO WORLD!!
       <button onClick={()=>ia(prev=> prev+1)}>
         {i}
       </button>
-    </div>
+    </BrowserRouter>
   )
 }
 
