@@ -33,7 +33,8 @@ function App() {
         {i}
       </button>
       <Routes>
-        <Route path='/Base' element={<Home/>}>
+        <Route path='/' element={<HomeHeader/>}>
+          <Route index element={<Home />} />
           <Route path='Blog' element={<Blog/>}>
 
           </Route>
@@ -58,7 +59,6 @@ export default App
 
 function Home(){
   return <div>home
-    <Outlet />
   </div>
 }
 function Login(){
@@ -66,4 +66,10 @@ function Login(){
 }
 function Blog(){
   return <div>Blog</div>
+}
+function HomeHeader(){
+  return <div>
+    <h1>HEADER MAYBE HERE</h1>
+    <Outlet />
+  </div>
 }
