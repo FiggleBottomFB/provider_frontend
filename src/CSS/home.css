@@ -1,0 +1,19 @@
+#home-container{
+    height: 20rem; 
+}
+.home-route-link{
+    text-decoration: none;
+    color: black;
+}
+.home-route-link:active{
+    color: black;
+}
+.home-route-link-text-container{
+    width: 10rem;
+    height: 6rem;
+    border-radius: 100%;
+    background-color: #D9D9D9;
+}
+.home-route-link-text-container:hover{
+    background-color: #b4b4b4;
+}

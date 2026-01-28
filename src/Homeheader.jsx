@@ -1,10 +1,29 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate, NavLink } from 'react-router-dom';
+import './CSS/header.css'
+import './CSS/commonclass.css'
+import viteLogo from '/vite.svg'
+import reactLogo from './assets/react.svg'
+
 
 function HomeHeader(){
-    return <div>
-      <h1>HEADER MAYBE HERE</h1>
-      <Outlet />
-    </div>
+    const navigate = useNavigate()
+    return( 
+        <div>
+            <div id="header-container" className="flex-row justify-between align-center">
+                <img onClick={()=>{navigate("/")}} id="header-logo-image" src={viteLogo} alt="LogoImg" />
+                <nav id="header-route-link-container" className='flex-row justify-around'>
+                    <NavLink to="/wiki" className='header-route-link'>Wiki</NavLink> 
+                    <NavLink to="/blog" className='header-route-link'>Blog</NavLink> 
+                    <NavLink to="/calendar" className='header-route-link'>Kalender</NavLink> 
+                </nav>
+                <div id="header-invacc-container" className='flex-row align-center'>
+                    <img id="invitations-img" src={reactLogo} alt="LetterImg" />
+                    link to user page 
+                </div>
+            </div>
+            <Outlet />
+        </div>
+    )
 }
 
 export default HomeHeader

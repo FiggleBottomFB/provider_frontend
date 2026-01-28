@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import{login} from './apicalls'
-import './App.css'
+import './CSS/App.css'
 import { BrowserRouter, Routes, Route, Link, useNavigate, useParams, Outlet } from 'react-router-dom';
 
 import Login from './Login'
@@ -12,6 +12,7 @@ import HomeHeader from './Homeheader'
 import Blog from './Blog/Blog'
 import BlogPost from './Blog/Blogpost'
 import EditBlogPost from './Blog/Editblogpost'
+import BlogContainer from './Blog/Blogcontainer'
 
 import Calendar from './Calendar/Calendar'
 
@@ -20,6 +21,7 @@ import EditWiki from './Wiki/Editwiki'
 import EditWikiPage from './Wiki/Editwikipage'
 import WikiPage from './Wiki/Wikipage'
 import WikiPageHistory from './Wiki/Wikipagehistory'
+import WikiContainer from './Wiki/Wikicontainer'
 
 async function GetToken(){
   const data = await Testfetch2();
@@ -47,13 +49,13 @@ function App() {
         <Route path='/' element={<HomeHeader/>}>
           <Route index element={<Home />} />
 
-          <Route path='Blog' element={<Blog/>}>
+          <Route path='Blog' element={<BlogContainer/>}>
             <Route index element={<Blog />} />
             <Route path=":blogpostid" element={<BlogPost/>} />
             <Route path="edit/:blogpostid" element={<EditBlogPost/>}/>
           </Route>
 
-          <Route path='Wiki' element={<Wiki/>}>
+          <Route path='Wiki' element={<WikiContainer/>}>
             <Route index element={<Wiki />} />
             <Route path="page/:wikipageid" element={<WikiPage/>} />
             <Route path="edit/:wikipageid" element={<EditWiki/>}/>
