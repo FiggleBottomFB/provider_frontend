@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import{login} from './apicalls'
 import{verifyToken} from './apicalls'
 import './CSS/App.css'
 import { BrowserRouter, Routes, Route, Link, useNavigate, useParams, Outlet } from 'react-router-dom';
@@ -24,12 +23,7 @@ import WikiPage from './Wiki/Wikipage'
 import WikiPageHistory from './Wiki/Wikipagehistory'
 import WikiContainer from './Wiki/Wikicontainer'
 
-async function GetToken(){
-  const data = await Testfetch2();
-  console.log(data.token);
-  const verify = await VerifyToken(data.token)
-  console.log(verify)
-}
+
 async function verifyapi() {
     const data = await verifyToken();
     console.log(data);
