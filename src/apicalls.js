@@ -1,8 +1,20 @@
 const API_BASE = "https://tp1.api.ntigskovde.se";
 
-async function apiFetch(path, { method = "GET", token, personToken, body, isFormData } = {}) {
+let cachedToken = null;
+let loginPromise = null;
+
+
+async function apiFetch(path, options = {}) {
+  const { method = "GET", personToken, body, isFormData, skipAuth = false } =
+    options;
+
   const headers = {};
-  if (token) headers["Authorization"] = "Bearer " + token;
+
+  if (!skipAuth) {
+    const token = await getToken();
+    headers["Authorization"] = "Bearer " + token;
+  }
+
   if (personToken) headers["X-Person-Token"] = personToken;
   if (body && !isFormData) headers["Content-Type"] = "application/json";
 
@@ -12,221 +24,248 @@ async function apiFetch(path, { method = "GET", token, personToken, body, isForm
     body: body ? (isFormData ? body : JSON.stringify(body)) : undefined,
   });
 
-  return res.json();
+  return await res.json();
 }
+
+
+
+async function getToken() {
+  // 1. If token already exists, return it instantly
+  if (cachedToken) return cachedToken;
+
+  // 2. If login is already happening, wait for it
+  if (loginPromise) return loginPromise;
+
+  // 3. Otherwise start login once
+  loginPromise = login("simonelias", "simonelias")
+    .then((res) => {
+      cachedToken = res.token;
+      return cachedToken;
+    })
+    .finally(() => {
+      loginPromise = null; // cleanup after finished
+    });
+
+  return loginPromise;
+}
+
 //MARK:AUTH
 /* ===================== AUTH ===================== */
-export const login = (username, password) =>
-  apiFetch("/api/auth/login", { method: "POST", body: { username, password } });
+const login = (username, password) =>
+  apiFetch("/api/auth/login", {
+    method: "POST",
+    body: { username, password },
+    skipAuth: true,
+  });
 
-export const verifyToken = (token) =>
-  apiFetch("/api/auth/verify", { method: "POST", token });
+export const verifyToken = () =>
+  apiFetch("/api/auth/verify", { method: "POST" });
 
-export const logout = (token) =>
-  apiFetch("/api/auth/logout", { method: "POST", token });
+export const logout = () =>
+  apiFetch("/api/auth/logout", { method: "POST" });
 
 //MARK:PEOPLE
 /* ===================== PEOPLE ===================== */
-export const personLogin = (token, username, passwordhash) =>
-  apiFetch("/api/people/cred/login", { method: "POST", token, body: { username, passwordhash } });
+export const personLogin = ( username, passwordhash) =>
+  apiFetch("/api/people/cred/login", { method: "POST",  body: { username, passwordhash } });
 
-export const personLogout = (token) =>
-  apiFetch("/api/people/cred/logout", { method: "POST", token });
+export const personLogout = (personToken) =>
+  apiFetch("/api/people/cred/logout", { method: "POST", personToken });
 
-export const getAllPeople = (token, personToken, includeBlocked = false) =>
-  apiFetch(`/api/people/get-all${includeBlocked ? "?include-blocked=1" : ""}`, { token, personToken });
+export const getAllPeople = ( personToken, includeBlocked = false) =>
+  apiFetch(`/api/people/get-all${includeBlocked ? "?include-blocked=1" : ""}`, {  personToken });
 
-export const getPerson = (token, personToken, id) =>
-  apiFetch(`/api/people/get?id=${id}`, { token, personToken });
+export const getPerson = ( personToken, id) =>
+  apiFetch(`/api/people/get?id=${id}`, {  personToken });
 
-export const addPerson = (token, personToken, fields) =>
-  apiFetch("/api/people/add", { method: "POST", token, personToken, body: { fields } });
+export const addPerson = ( personToken, fields) =>
+  apiFetch("/api/people/add", { method: "POST",  personToken, body: { fields } });
 
-export const editPerson = (token, personToken, personID, fields) =>
-  apiFetch("/api/people/edit", { method: "POST", token, personToken, body: { personID, fields } });
+export const editPerson = ( personToken, personID, fields) =>
+  apiFetch("/api/people/edit", { method: "POST",  personToken, body: { personID, fields } });
 
-export const deletePerson = (token, personToken, personID) =>
-  apiFetch("/api/people/del", { method: "POST", token, personToken, body: { personID } });
+export const deletePerson = ( personToken, personID) =>
+  apiFetch("/api/people/del", { method: "POST",  personToken, body: { personID } });
 
 //MARK:BLOG
 /* ===================== BLOG ===================== */
-export const getAllBlogs = (token, personToken, params = "") =>
-  apiFetch(`/api/blog/get-all${params}`, { token, personToken });
+export const getAllBlogs = ( personToken, params = "") =>
+  apiFetch(`/api/blog/get-all${params}`, {  personToken });
 
-export const getBlog = (token, personToken, id) =>
-  apiFetch(`/api/blog/get?id=${id}`, { token, personToken });
+export const getBlog = ( personToken, id) =>
+  apiFetch(`/api/blog/get?id=${id}`, {  personToken });
 
-export const addBlog = (token, personToken, personID, fields) =>
-  apiFetch("/api/blog/add", { method: "POST", token, personToken, body: { personID, fields } });
+export const addBlog = ( personToken, personID, fields) =>
+  apiFetch("/api/blog/add", { method: "POST",  personToken, body: { personID, fields } });
 
-export const editBlog = (token, personToken, blogID, fields) =>
-  apiFetch("/api/blog/edit", { method: "POST", token, personToken, body: { blogID, fields } });
+export const editBlog = ( personToken, blogID, fields) =>
+  apiFetch("/api/blog/edit", { method: "POST",  personToken, body: { blogID, fields } });
 
-export const deleteBlog = (token, personToken, blogID) =>
-  apiFetch("/api/blog/del", { method: "POST", token, personToken, body: { blogID } });
+export const deleteBlog = ( personToken, blogID) =>
+  apiFetch("/api/blog/del", { method: "POST",  personToken, body: { blogID } });
 
-export const getBlogPerms = (token, personToken, blogID) =>
-  apiFetch(`/api/blog/perm/get-all?id=${blogID}`, { token, personToken });
+export const getBlogPerms = ( personToken, blogID) =>
+  apiFetch(`/api/blog/perm/get-all?id=${blogID}`, {  personToken });
 
-export const editBlogPerm = (token, personToken, blogID, personID, perms) =>
-  apiFetch("/api/blog/perm/edit", { method: "POST", token, personToken, body: { blogID, personID, perms } });
+export const editBlogPerm = ( personToken, blogID, personID, perms) =>
+  apiFetch("/api/blog/perm/edit", { method: "POST",  personToken, body: { blogID, personID, perms } });
 //MARK:SETTINGS
 /* Blog Settings */
-export const addBlogSetting = (token, personToken, blogID, settings) =>
-  apiFetch("/api/blog/setting/add", { method: "POST", token, personToken, body: { blogID, settings } });
+export const addBlogSetting = ( personToken, blogID, settings) =>
+  apiFetch("/api/blog/setting/add", { method: "POST",  personToken, body: { blogID, settings } });
 
-export const editBlogSetting = (token, personToken, blogID, settings) =>
-  apiFetch("/api/blog/setting/edit", { method: "POST", token, personToken, body: { blogID, settings } });
+export const editBlogSetting = ( personToken, blogID, settings) =>
+  apiFetch("/api/blog/setting/edit", { method: "POST",  personToken, body: { blogID, settings } });
 
-export const deleteBlogSetting = (token, personToken, blogID, keys) =>
-  apiFetch("/api/blog/setting/del", { method: "POST", token, personToken, body: { blogID, settings: keys } });
+export const deleteBlogSetting = ( personToken, blogID, keys) =>
+  apiFetch("/api/blog/setting/del", { method: "POST",  personToken, body: { blogID, settings: keys } });
 
 //MARK:BLOG POSTS
 /* Blog Posts */
-export const getBlogPosts = (token, personToken, blogID, params = "") =>
-  apiFetch(`/api/blog/post/get-all?blogID=${blogID}${params}`, { token, personToken });
+export const getBlogPosts = ( personToken, blogID, params = "") =>
+  apiFetch(`/api/blog/post/get-all?blogID=${blogID}${params}`, {  personToken });
 
-export const getBlogPost = (token, personToken, id) =>
-  apiFetch(`/api/blog/post/get?id=${id}`, { token, personToken });
+export const getBlogPost = ( personToken, id) =>
+  apiFetch(`/api/blog/post/get?id=${id}`, {  personToken });
 
-export const addBlogPost = (token, personToken, blogID, fields) =>
-  apiFetch("/api/blog/post/add", { method: "POST", token, personToken, body: { blogID, fields } });
+export const addBlogPost = ( personToken, blogID, fields) =>
+  apiFetch("/api/blog/post/add", { method: "POST",  personToken, body: { blogID, fields } });
 
-export const editBlogPost = (token, personToken, blogpostID, fields) =>
-  apiFetch("/api/blog/post/edit", { method: "POST", token, personToken, body: { blogpostID, fields } });
+export const editBlogPost = ( personToken, blogpostID, fields) =>
+  apiFetch("/api/blog/post/edit", { method: "POST",  personToken, body: { blogpostID, fields } });
 
-export const deleteBlogPost = (token, personToken, blogpostID) =>
-  apiFetch("/api/blog/post/del", { method: "POST", token, personToken, body: { blogpostID } });
+export const deleteBlogPost = ( personToken, blogpostID) =>
+  apiFetch("/api/blog/post/del", { method: "POST",  personToken, body: { blogpostID } });
 
 //MARK:BLOG COMMENTS
 /* Blog Comments */
-export const addBlogComment = (token, personToken, parent, fields) =>
-  apiFetch("/api/blog/post/comment/add", { method: "POST", token, personToken, body: { parent, fields } });
+export const addBlogComment = ( personToken, parent, fields) =>
+  apiFetch("/api/blog/post/comment/add", { method: "POST",  personToken, body: { parent, fields } });
 
-export const deleteBlogComment = (token, personToken, commentID) =>
-  apiFetch("/api/blog/post/comment/del", { method: "POST", token, personToken, body: { commentID } });
+export const deleteBlogComment = ( personToken, commentID) =>
+  apiFetch("/api/blog/post/comment/del", { method: "POST",  personToken, body: { commentID } });
 
 //MARK:WIKI
 /* ===================== WIKI ===================== */
-export const getAllWikis = (token, personToken, params = "") =>
-  apiFetch(`/api/wiki/get-all${params}`, { token, personToken });
+export const getAllWikis = ( personToken, params = "") =>
+  apiFetch(`/api/wiki/get-all${params}`, {  personToken });
 
-export const getWiki = (token, personToken, id) =>
-  apiFetch(`/api/wiki/get?id=${id}`, { token, personToken });
+export const getWiki = ( personToken, id) =>
+  apiFetch(`/api/wiki/get?id=${id}`, {  personToken });
 
-export const addWiki = (token, personToken, personID, fields) =>
-  apiFetch("/api/wiki/add", { method: "POST", token, personToken, body: { personID, fields } });
+export const addWiki = ( personToken, personID, fields) =>
+  apiFetch("/api/wiki/add", { method: "POST",  personToken, body: { personID, fields } });
 
-export const editWiki = (token, personToken, wikiID, fields) =>
-  apiFetch("/api/wiki/edit", { method: "POST", token, personToken, body: { wikiID, fields } });
+export const editWiki = ( personToken, wikiID, fields) =>
+  apiFetch("/api/wiki/edit", { method: "POST",  personToken, body: { wikiID, fields } });
 
-export const deleteWiki = (token, personToken, wikiID) =>
-  apiFetch("/api/wiki/del", { method: "POST", token, personToken, body: { wikiID } });
+export const deleteWiki = ( personToken, wikiID) =>
+  apiFetch("/api/wiki/del", { method: "POST",  personToken, body: { wikiID } });
 
-export const getWikiPerms = (token, personToken, wikiID) =>
-  apiFetch(`/api/wiki/perm/get-all?id=${wikiID}`, { token, personToken });
+export const getWikiPerms = ( personToken, wikiID) =>
+  apiFetch(`/api/wiki/perm/get-all?id=${wikiID}`, {  personToken });
 
-export const editWikiPerm = (token, personToken, wikiID, personID, perms) =>
-  apiFetch("/api/wiki/perm/edit", { method: "POST", token, personToken, body: { wikiID, personID, perms } });
+export const editWikiPerm = ( personToken, wikiID, personID, perms) =>
+  apiFetch("/api/wiki/perm/edit", { method: "POST",  personToken, body: { wikiID, personID, perms } });
 //MARK:WIKI SETTINGS
 /* Wiki Settings */
-export const addWikiSetting = (token, personToken, wikiID, settings) =>
-  apiFetch("/api/wiki/setting/add", { method: "POST", token, personToken, body: { wikiID, settings } });
+export const addWikiSetting = ( personToken, wikiID, settings) =>
+  apiFetch("/api/wiki/setting/add", { method: "POST",  personToken, body: { wikiID, settings } });
 
-export const editWikiSetting = (token, personToken, wikiID, settings) =>
-  apiFetch("/api/wiki/setting/edit", { method: "POST", token, personToken, body: { wikiID, settings } });
+export const editWikiSetting = ( personToken, wikiID, settings) =>
+  apiFetch("/api/wiki/setting/edit", { method: "POST",  personToken, body: { wikiID, settings } });
 
-export const deleteWikiSetting = (token, personToken, wikiID, keys) =>
-  apiFetch("/api/wiki/setting/del", { method: "POST", token, personToken, body: { wikiID, settings: keys } });
+export const deleteWikiSetting = ( personToken, wikiID, keys) =>
+  apiFetch("/api/wiki/setting/del", { method: "POST",  personToken, body: { wikiID, settings: keys } });
 //MARK: WIKI PAGES
 /* Wiki Pages */
-export const getWikiPages = (token, personToken, wikiID, params = "") =>
-  apiFetch(`/api/wiki/page/get-all?wikiID=${wikiID}${params}`, { token, personToken });
+export const getWikiPages = ( personToken, wikiID, params = "") =>
+  apiFetch(`/api/wiki/page/get-all?wikiID=${wikiID}${params}`, {  personToken });
 
-export const getWikiPage = (token, personToken, id) =>
-  apiFetch(`/api/wiki/page/get?id=${id}`, { token, personToken });
+export const getWikiPage = ( personToken, id) =>
+  apiFetch(`/api/wiki/page/get?id=${id}`, {  personToken });
 
-export const addWikiPage = (token, personToken, wikiID, fields) =>
-  apiFetch("/api/wiki/page/add", { method: "POST", token, personToken, body: { wikiID, fields } });
+export const addWikiPage = ( personToken, wikiID, fields) =>
+  apiFetch("/api/wiki/page/add", { method: "POST",  personToken, body: { wikiID, fields } });
 
-export const editWikiPage = (token, personToken, wikipageID, fields) =>
-  apiFetch("/api/wiki/page/edit", { method: "POST", token, personToken, body: { wikipageID, fields } });
+export const editWikiPage = ( personToken, wikipageID, fields) =>
+  apiFetch("/api/wiki/page/edit", { method: "POST",  personToken, body: { wikipageID, fields } });
 
-export const deleteWikiPage = (token, personToken, wikipageID) =>
-  apiFetch("/api/wiki/page/del", { method: "POST", token, personToken, body: { wikipageID } });
+export const deleteWikiPage = ( personToken, wikipageID) =>
+  apiFetch("/api/wiki/page/del", { method: "POST",  personToken, body: { wikipageID } });
 //MARK: WIKI COMMENTS
 /* Wiki Comments */
-export const addWikiComment = (token, personToken, parent, fields) =>
-  apiFetch("/api/wiki/page/comment/add", { method: "POST", token, personToken, body: { parent, fields } });
+export const addWikiComment = ( personToken, parent, fields) =>
+  apiFetch("/api/wiki/page/comment/add", { method: "POST",  personToken, body: { parent, fields } });
 
-export const deleteWikiComment = (token, personToken, commentID) =>
-  apiFetch("/api/wiki/page/comment/del", { method: "POST", token, personToken, body: { commentID } });
+export const deleteWikiComment = ( personToken, commentID) =>
+  apiFetch("/api/wiki/page/comment/del", { method: "POST",  personToken, body: { commentID } });
 //MARK: WIKI HISTORY
 /* Wiki History */
-export const getWikiHistory = (token, personToken, wikipageID, params = "") =>
-  apiFetch(`/api/wiki/page/history/get-all?wikipageID=${wikipageID}${params}`, { token, personToken });
+export const getWikiHistory = ( personToken, wikipageID, params = "") =>
+  apiFetch(`/api/wiki/page/history/get-all?wikipageID=${wikipageID}${params}`, {  personToken });
 
-export const restoreWikiHistory = (token, personToken, wikipageHistoryID) =>
-  apiFetch("/api/wiki/page/history/restore", { method: "POST", token, personToken, body: { wikipageHistoryID } });
+export const restoreWikiHistory = ( personToken, wikipageHistoryID) =>
+  apiFetch("/api/wiki/page/history/restore", { method: "POST",  personToken, body: { wikipageHistoryID } });
 //MARK: CALENDAR
 /* ===================== CALENDAR ===================== */
-export const getAllCalendars = (token, personToken) =>
-  apiFetch("/api/cal/get-all", { token, personToken });
+export const getAllCalendars = ( personToken) =>
+  apiFetch("/api/cal/get-all", {  personToken });
 
-export const getCalendarSettings = (token, personToken) =>
-  apiFetch("/api/cal/get", { token, personToken });
+export const getCalendarSettings = ( personToken) =>
+  apiFetch("/api/cal/get", {  personToken });
 
-export const editCalendarSettings = (token, personToken, settings) =>
-  apiFetch("/api/cal/edit", { method: "POST", token, personToken, body: { settings } });
+export const editCalendarSettings = ( personToken, settings) =>
+  apiFetch("/api/cal/edit", { method: "POST",  personToken, body: { settings } });
 
-export const getEvents = (token, personToken, params = "") =>
-  apiFetch(`/api/cal/event/get-all${params}`, { token, personToken });
+export const getEvents = ( personToken, params = "") =>
+  apiFetch(`/api/cal/event/get-all${params}`, {  personToken });
 
-export const getEvent = (token, personToken, id) =>
-  apiFetch(`/api/cal/event/get?id=${id}`, { token, personToken });
+export const getEvent = ( personToken, id) =>
+  apiFetch(`/api/cal/event/get?id=${id}`, {  personToken });
 
-export const addEvent = (token, personToken, calID, fields) =>
-  apiFetch("/api/cal/event/add", { method: "POST", token, personToken, body: { calID, fields } });
+export const addEvent = ( personToken, calID, fields) =>
+  apiFetch("/api/cal/event/add", { method: "POST",  personToken, body: { calID, fields } });
 
-export const editEvent = (token, personToken, calEventID, fields) =>
-  apiFetch("/api/cal/event/edit", { method: "POST", token, personToken, body: { calEventID, fields } });
+export const editEvent = ( personToken, calEventID, fields) =>
+  apiFetch("/api/cal/event/edit", { method: "POST",  personToken, body: { calEventID, fields } });
 
-export const deleteEvent = (token, personToken, calEventID) =>
-  apiFetch("/api/cal/event/del", { method: "POST", token, personToken, body: { calEventID } });
+export const deleteEvent = ( personToken, calEventID) =>
+  apiFetch("/api/cal/event/del", { method: "POST",  personToken, body: { calEventID } });
 
-export const getCalEventPerms = (token, personToken, calEventID) =>
-  apiFetch(`/api/cal/event/perm/get-all?id=${calEventID}`, { token, personToken });
+export const getCalEventPerms = ( personToken, calEventID) =>
+  apiFetch(`/api/cal/event/perm/get-all?id=${calEventID}`, {  personToken });
 
-export const editCalEventPerm = (token, personToken, calEventID, personID, perms) =>
-  apiFetch("/api/cal/event/perm/edit", { method: "POST", token, personToken, body: { calEventID, personID, perms } });
+export const editCalEventPerm = ( personToken, calEventID, personID, perms) =>
+  apiFetch("/api/cal/event/perm/edit", { method: "POST",  personToken, body: { calEventID, personID, perms } });
 //MARK: MEDIA
 /* ===================== MEDIA ===================== */
-export const getAllMedia = (token, personToken) =>
-  apiFetch("/api/media/get-all", { token, personToken });
+export const getAllMedia = ( personToken) =>
+  apiFetch("/api/media/get-all", {  personToken });
 
-export const fetchMedia = (token, uuid) =>
+export const fetchMedia = ( uuid) =>
   fetch(`${API_BASE}/api/media/fetch?uuid=${uuid}`, {
     headers: { Authorization: "Bearer " + token },
   });
 
-export const uploadMedia = (token, personToken, file) => {
+export const uploadMedia = ( personToken, file) => {
   const fd = new FormData();
   fd.append("media", file);
-  return apiFetch("/api/media/upload", { method: "POST", token, personToken, body: fd, isFormData: true });
+  return apiFetch("/api/media/upload", { method: "POST",  personToken, body: fd, isFormData: true });
 };
 
-export const deleteMedia = (token, personToken, uuid) =>
-  apiFetch("/api/media/del", { method: "POST", token, personToken, body: { uuid } });
+export const deleteMedia = ( personToken, uuid) =>
+  apiFetch("/api/media/del", { method: "POST",  personToken, body: { uuid } });
 
-export const linkMedia = (token, personToken, payload) =>
-  apiFetch("/api/media/link", { method: "POST", token, personToken, body: payload });
+export const linkMedia = ( personToken, payload) =>
+  apiFetch("/api/media/link", { method: "POST",  personToken, body: payload });
 
-export const unlinkMedia = (token, personToken, payload) =>
-  apiFetch("/api/media/unlink", { method: "POST", token, personToken, body: payload });
+export const unlinkMedia = ( personToken, payload) =>
+  apiFetch("/api/media/unlink", { method: "POST",  personToken, body: payload });
 //MARK:TAGS
 /* ===================== TAGS ===================== */
-export const linkTags = (token, personToken, payload) =>
-  apiFetch("/api/tag/link", { method: "POST", token, personToken, body: payload });
+export const linkTags = ( personToken, payload) =>
+  apiFetch("/api/tag/link", { method: "POST",  personToken, body: payload });
 
-export const unlinkTags = (token, personToken, payload) =>
-  apiFetch("/api/tag/unlink", { method: "POST", token, personToken, body: payload });
+export const unlinkTags = ( personToken, payload) =>
+  apiFetch("/api/tag/unlink", { method: "POST",  personToken, body: payload });
