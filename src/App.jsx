@@ -1,10 +1,25 @@
 import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import {Testfetch, Testfetch2, VerifyToken} from './Test'
 import{login} from './apicalls'
 import './App.css'
 import { BrowserRouter, Routes, Route, Link, useNavigate, useParams, Outlet } from 'react-router-dom';
+
+import Login from './Login'
+import Home from './Home'
+import HomeHeader from './Homeheader'
+
+import Blog from './Blog/Blog'
+import BlogPost from './Blog/Blogpost'
+import EditBlogPost from './Blog/Editblogpost'
+
+import Calendar from './Calendar/Calendar'
+
+import Wiki from './Wiki/Wiki'
+import EditWiki from './Wiki/Editwiki'
+import EditWikiPage from './Wiki/Editwikipage'
+import WikiPage from './Wiki/Wikipage'
+import WikiPageHistory from './Wiki/Wikipagehistory'
 
 async function GetToken(){
   const data = await Testfetch2();
@@ -28,20 +43,25 @@ function App() {
 
   return (
     <BrowserRouter>
-      HELLO WORLD!!
-      <button onClick={()=>ia(prev=> prev+1)}>
-        {i}
-      </button>
       <Routes>
         <Route path='/' element={<HomeHeader/>}>
           <Route index element={<Home />} />
+
           <Route path='Blog' element={<Blog/>}>
-
+            <Route index element={<Blog />} />
+            <Route path=":blogpostid" element={<BlogPost/>} />
+            <Route path="edit/:blogpostid" element={<EditBlogPost/>}/>
           </Route>
-          <Route path='Wiki' element={<Blog/>}>
 
+          <Route path='Wiki' element={<Wiki/>}>
+            <Route index element={<Wiki />} />
+            <Route path="page/:wikipageid" element={<WikiPage/>} />
+            <Route path="edit/:wikipageid" element={<EditWiki/>}/>
+            <Route path="edit/page/:wikipageid" element={<EditWikiPage/>}/>
+            <Route path="historik/:wikipageid" element={<WikiPageHistory/>}/>
           </Route>
-          <Route path='Calandar' element={<Blog/>}>
+
+          <Route path='Calendar' element={<Calendar/>}>
 
           </Route>
           <Route path='User' element={<Blog/>}></Route>
@@ -56,20 +76,3 @@ function App() {
 }
 
 export default App
-
-function Home(){
-  return <div>home
-  </div>
-}
-function Login(){
-  return <div>LOGIN</div>
-}
-function Blog(){
-  return <div>Blog</div>
-}
-function HomeHeader(){
-  return <div>
-    <h1>HEADER MAYBE HERE</h1>
-    <Outlet />
-  </div>
-}
