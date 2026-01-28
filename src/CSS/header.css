@@ -1,0 +1,26 @@
+#header-container{
+    width: 100vw;
+    background-color: #536797;
+    height: 8rem;
+}
+
+#header-logo-image{
+    margin-left: 1rem;
+}
+#header-logo-image:hover{
+    cursor: pointer;
+}
+
+#header-route-link-container{
+    width: 60vw;
+}
+.header-route-link:active{
+    color: #007bff;
+}
+.header-route-link.active{
+    color: #007bff;
+}
+
+#header-invacc-container{
+    margin-right: 1rem;
+}
