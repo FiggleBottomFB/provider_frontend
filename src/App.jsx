@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import{login} from './apicalls'
+import{verifyToken} from './apicalls'
 import './CSS/App.css'
 import { BrowserRouter, Routes, Route, Link, useNavigate, useParams, Outlet } from 'react-router-dom';
 
@@ -29,8 +30,8 @@ async function GetToken(){
   const verify = await VerifyToken(data.token)
   console.log(verify)
 }
-async function Loginapi() {
-    const data = await login("simonelias","simonelias");
+async function verifyapi() {
+    const data = await verifyToken();
     console.log(data);
   
 }
@@ -40,7 +41,7 @@ function App() {
   const [i, ia] = useState(0)
 
   useEffect(()=>{
-    Loginapi()
+    verifyapi()
   }, [])
 
   return (
