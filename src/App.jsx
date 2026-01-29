@@ -15,7 +15,6 @@ import EditBlogPost from './Blog/Editblogpost'
 import BlogContainer from './Blog/Blogcontainer'
 
 import Calendar from './Calendar/Calendar'
-import CalendarContainer from './Calendar/Calendarcontainer'
 
 import Wiki from './Wiki/Wiki'
 import EditWiki from './Wiki/Editwiki'
@@ -23,25 +22,39 @@ import EditWikiPage from './Wiki/Editwikipage'
 import WikiPage from './Wiki/Wikipage'
 import WikiPageHistory from './Wiki/Wikipagehistory'
 import WikiContainer from './Wiki/Wikicontainer'
+import { AuthProvider } from './Auth/Authcontext'
+import { RequireAuth } from './Auth/Requireauth'
 
 
-async function verifyapi() {
-    const data = await verifyToken();
-    console.log(data);
-  
-}
 
 function App() {
   const [count, setCount] = useState(0)
   const [i, ia] = useState(0)
-  const [UserInfo, setUserInfo] = useState([])
 
-  useEffect(()=>{
-    verifyapi()
-  }, [])
+  useEffect(() => {
+    const controller = new AbortController();
+  
+    const verify = async () => {
+      try {
+        const data = await verifyToken({ signal: controller.signal });
+  
+        console.log(data);
+      } catch (err) {
+        if (err.name === "AbortError") return;
+        console.error("Verify failed:", err);
+      }
+    };
+  
+    verify();
+  
+    return () => {
+      controller.abort(); // cancels fetch / makes ui not care about return
+    };
+  }, []);
 
   return (
-    <BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
       <Routes>
         <Route path='/' element={<HomeHeader/>}>
           <Route index element={<Home />} />
@@ -60,18 +73,27 @@ function App() {
             <Route path="historik/:wikipageid" element={<WikiPageHistory/>}/>
           </Route>
 
-          <Route path='Calendar' element={<CalendarContainer/>}>
-            <Route index element={<Calendar UserInfo={UserInfo}/>} />
+
+            <Route path='Calendar' element={<RequireAuth roles={["user","admin"]}><CalendarContainer/></RequireAuth>}>
+              <Route index element={<Calendar UserInfo={UserInfo}/>} />
+            </Route>
+
           </Route>
           <Route path='User' element={<Blog/>}></Route>
 
         </Route>
 
 
-        <Route path='/Login' element={<Login UserInfo={UserInfo} setUserInfo={setUserInfo}/>}></Route>
+        <Route path='/Login' element={<Login/>}/>
+        <Route path='/unauthorized' element={<Unauthorized/>}/>
       </Routes>
     </BrowserRouter>
+    </AuthProvider>
+    
   )
+}
+function Unauthorized(){
+  return <h2>UNAUTHORIZED</h2>
 }
 
 export default App

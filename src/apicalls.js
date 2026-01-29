@@ -5,7 +5,7 @@ let loginPromise = null;
 
 
 async function apiFetch(path, options = {}) {
-  const { method = "GET", personToken, body, isFormData, skipAuth = false } =
+  const { method = "GET", personToken, body, isFormData, skipAuth = false, signal, } =
     options;
 
   const headers = {};
@@ -21,9 +21,10 @@ async function apiFetch(path, options = {}) {
   const res = await fetch(API_BASE + path, {
     method,
     headers,
+    signal,
     body: body ? (isFormData ? body : JSON.stringify(body)) : undefined,
   });
-  
+
   return await res.json();
 }
 
@@ -58,9 +59,12 @@ const login = (username, password) =>
     skipAuth: true,
   });
 
-export const verifyToken = () =>
-  apiFetch("/api/auth/verify", { method: "POST" });
-
+export function verifyToken(options = {}) {
+  return apiFetch("/api/auth/verify", {
+    method: "POST",
+    ...options,
+  });
+}
 export const logout = () =>
   apiFetch("/api/auth/logout", { method: "POST" });
 
