@@ -21,7 +21,9 @@ function HomeHeader(){
                     link to user page 
                 </div>
             </div>
-            <Outlet />
+            <div id="outlet-container">
+                <Outlet />
+            </div>
         </div>
     )
 }

@@ -1,5 +1,7 @@
 #home-container{
-    height: 20rem; 
+    height: 100%;
+    max-width: 100vw;
+    background-color: #93a9dd;
 }
 .home-route-link{
     text-decoration: none;
