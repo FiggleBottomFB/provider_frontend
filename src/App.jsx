@@ -15,6 +15,7 @@ import EditBlogPost from './Blog/Editblogpost'
 import BlogContainer from './Blog/Blogcontainer'
 
 import Calendar from './Calendar/Calendar'
+import CalendarContainer from './Calendar/Calendarcontainer'
 
 import Wiki from './Wiki/Wiki'
 import EditWiki from './Wiki/Editwiki'
@@ -33,7 +34,7 @@ async function verifyapi() {
 function App() {
   const [count, setCount] = useState(0)
   const [i, ia] = useState(0)
-  const [userInfo, setUserInfo] = useState([])
+  const [UserInfo, setUserInfo] = useState([])
 
   useEffect(()=>{
     verifyapi()
@@ -59,15 +60,15 @@ function App() {
             <Route path="historik/:wikipageid" element={<WikiPageHistory/>}/>
           </Route>
 
-          <Route path='Calendar' element={<Calendar/>}>
-
+          <Route path='Calendar' element={<CalendarContainer/>}>
+            <Route index element={<Calendar UserInfo={UserInfo}/>} />
           </Route>
           <Route path='User' element={<Blog/>}></Route>
 
         </Route>
 
 
-        <Route path='/Login' element={<Login userInfo={userInfo} setUserInfo={setUserInfo}/>}></Route>
+        <Route path='/Login' element={<Login UserInfo={UserInfo} setUserInfo={setUserInfo}/>}></Route>
       </Routes>
     </BrowserRouter>
   )
