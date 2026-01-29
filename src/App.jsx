@@ -22,24 +22,39 @@ import EditWikiPage from './Wiki/Editwikipage'
 import WikiPage from './Wiki/Wikipage'
 import WikiPageHistory from './Wiki/Wikipagehistory'
 import WikiContainer from './Wiki/Wikicontainer'
+import { AuthProvider } from './Auth/Authcontext'
+import { RequireAuth } from './Auth/Requireauth'
 
 
-async function verifyapi() {
-    const data = await verifyToken();
-    console.log(data);
-  
-}
 
 function App() {
   const [count, setCount] = useState(0)
   const [i, ia] = useState(0)
 
-  useEffect(()=>{
-    verifyapi()
-  }, [])
+  useEffect(() => {
+    const controller = new AbortController();
+  
+    const verify = async () => {
+      try {
+        const data = await verifyToken({ signal: controller.signal });
+  
+        console.log(data);
+      } catch (err) {
+        if (err.name === "AbortError") return;
+        console.error("Verify failed:", err);
+      }
+    };
+  
+    verify();
+  
+    return () => {
+      controller.abort(); // cancels fetch / makes ui not care about return
+    };
+  }, []);
 
   return (
-    <BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
       <Routes>
         <Route path='/' element={<HomeHeader/>}>
           <Route index element={<Home />} />
@@ -58,7 +73,8 @@ function App() {
             <Route path="historik/:wikipageid" element={<WikiPageHistory/>}/>
           </Route>
 
-          <Route path='Calendar' element={<Calendar/>}>
+          <Route path='Calendar' element={<RequireAuth roles={["user","admin"]}><Calendar/></RequireAuth>}>
+          
 
           </Route>
           <Route path='User' element={<Blog/>}></Route>
@@ -66,10 +82,16 @@ function App() {
         </Route>
 
 
-        <Route path='/Login' element={<Login/>}></Route>
+        <Route path='/Login' element={<Login/>}/>
+        <Route path='/unauthorized' element={<Unauthorized/>}/>
       </Routes>
     </BrowserRouter>
+    </AuthProvider>
+    
   )
+}
+function Unauthorized(){
+  return <h2>UNAUTHORIZED</h2>
 }
 
 export default App
