@@ -15,6 +15,7 @@ import EditBlogPost from './Blog/Editblogpost'
 import BlogContainer from './Blog/Blogcontainer'
 
 import Calendar from './Calendar/Calendar'
+import CalendarContainer from './Calendar/Calendarcontainer'
 
 import Wiki from './Wiki/Wiki'
 import EditWiki from './Wiki/Editwiki'
@@ -27,9 +28,11 @@ import { RequireAuth } from './Auth/Requireauth'
 
 
 
+
 function App() {
   const [count, setCount] = useState(0)
   const [i, ia] = useState(0)
+  const [UserInfo, setUserInfo]= useState([])
 
   useEffect(() => {
     const controller = new AbortController();
@@ -78,7 +81,6 @@ function App() {
               <Route index element={<Calendar UserInfo={UserInfo}/>} />
             </Route>
 
-          </Route>
           <Route path='User' element={<Blog/>}></Route>
 
         </Route>
