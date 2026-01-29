@@ -1,0 +1,28 @@
+#calendar-page-container{
+    max-width: 100vw;
+    height: 85vh;
+    background-color: #d9d9d9;
+}
+
+#calendar-display-container{
+    width: 75vw;
+    height: 84.7vh;
+}
+
+#calendar-container{
+    width: 100vw;
+}
+
+#day-container{
+    height: 100%;
+    background-color: #ececec;
+    border: 1px black solid;
+    width: 100%;
+    height: 100%;
+}
+
+#day-container-header{
+    border-bottom: 1px black solid;
+    height: 5%;
+    width: 100%;
+}

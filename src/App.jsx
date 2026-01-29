@@ -73,8 +73,10 @@ function App() {
             <Route path="historik/:wikipageid" element={<WikiPageHistory/>}/>
           </Route>
 
-          <Route path='Calendar' element={<RequireAuth roles={["user","admin"]}><Calendar/></RequireAuth>}>
-          
+
+            <Route path='Calendar' element={<RequireAuth roles={["user","admin"]}><CalendarContainer/></RequireAuth>}>
+              <Route index element={<Calendar UserInfo={UserInfo}/>} />
+            </Route>
 
           </Route>
           <Route path='User' element={<Blog/>}></Route>
