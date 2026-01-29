@@ -33,6 +33,7 @@ async function verifyapi() {
 function App() {
   const [count, setCount] = useState(0)
   const [i, ia] = useState(0)
+  const [userInfo, setUserInfo] = useState([])
 
   useEffect(()=>{
     verifyapi()
@@ -66,7 +67,7 @@ function App() {
         </Route>
 
 
-        <Route path='/Login' element={<Login/>}></Route>
+        <Route path='/Login' element={<Login userInfo={userInfo} setUserInfo={setUserInfo}/>}></Route>
       </Routes>
     </BrowserRouter>
   )

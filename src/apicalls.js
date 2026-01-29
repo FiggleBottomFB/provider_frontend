@@ -23,7 +23,7 @@ async function apiFetch(path, options = {}) {
     headers,
     body: body ? (isFormData ? body : JSON.stringify(body)) : undefined,
   });
-
+  
   return await res.json();
 }
 
