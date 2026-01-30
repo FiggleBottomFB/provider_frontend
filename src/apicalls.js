@@ -9,7 +9,7 @@ async function apiFetch(path, options = {}) {
     options;
 
   const headers = {};
-
+  
   if (!skipAuth) {
     const token = await getToken();
     console.log(token)

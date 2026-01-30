@@ -13,6 +13,7 @@ import Blogmeny from './Blog/Blogmeny'
 import Blog from './Blog/Blog'
 import BlogPost from './Blog/Blogpost'
 import EditBlogPost from './Blog/Editblogpost'
+import EditBlog from './Blog/Editblog'
 import BlogContainer from './Blog/Blogcontainer'
 
 import Calendar from './Calendar/Calendar'
@@ -68,6 +69,7 @@ function App() {
             <Route path=':blogid' element={<Blog />}></Route>
             <Route path="blog/:blogpostid" element={<BlogPost/>} />
             <Route path="blog/edit/:blogpostid" element={<EditBlogPost/>}/>
+            <Route path="edit/:blogid" element={<EditBlog/>}/>
           </Route>
 
           <Route path='Wiki' element={<WikiContainer/>}>
