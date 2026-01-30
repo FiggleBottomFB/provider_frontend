@@ -13,6 +13,7 @@ import Blogmeny from './Blog/Blogmeny'
 import Blog from './Blog/Blog'
 import BlogPost from './Blog/Blogpost'
 import EditBlogPost from './Blog/Editblogpost'
+import EditBlog from './Blog/Editblog'
 import BlogContainer from './Blog/Blogcontainer'
 
 import Calendar from './Calendar/Calendar'
@@ -26,6 +27,7 @@ import WikiPageHistory from './Wiki/Wikipagehistory'
 import WikiContainer from './Wiki/Wikicontainer'
 import { AuthProvider } from './Auth/Authcontext'
 import { RequireAuth } from './Auth/Requireauth'
+import { useApi } from './hooks/useApi'
 
 
 
@@ -35,26 +37,13 @@ function App() {
   const [i, ia] = useState(0)
   const [UserInfo, setUserInfo]= useState([])
 
-  useEffect(() => {
-    const controller = new AbortController();
-  
-    const verify = async () => {
-      try {
-        const data = await verifyToken({ signal: controller.signal });
-  
-        console.log(data);
-      } catch (err) {
-        if (err.name === "AbortError") return;
-        console.error("Verify failed:", err);
-      }
-    };
-  
-    verify();
-  
-    return () => {
-      controller.abort(); // cancels fetch / makes ui not care about return
-    };
-  }, []);
+  // const testuseapi=useApi(() => verifyToken(), []);
+  // if(testuseapi.loading){return <div>Loading</div>}
+  // if(testuseapi.data){
+  //   return(<div>{testuseapi.data?.newExpiresAt}</div>)
+  // }
+
+
 
   return (
     <AuthProvider>
@@ -68,6 +57,7 @@ function App() {
             <Route path=':blogid' element={<Blog />}></Route>
             <Route path="blog/:blogpostid" element={<BlogPost/>} />
             <Route path="blog/edit/:blogpostid" element={<EditBlogPost/>}/>
+            <Route path="edit/:blogid" element={<EditBlog/>}/>
           </Route>
 
           <Route path='Wiki' element={<WikiContainer/>}>

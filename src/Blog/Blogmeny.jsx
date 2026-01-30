@@ -8,20 +8,23 @@ import '.././CSS/commonclass.css'
 function DisplayBlogs({LatestBlogs, setLatestBlogs}){
     const navigate = useNavigate()
     useEffect(() => {
-        const fetchPosts = async () => {
+        const fetchBlogs = async () => {
             const latestBlogData = await getAllBlogs(window.sessionStorage.getItem("token"))
             setLatestBlogs(latestBlogData.blogs)
-            console.log(latestBlogData.blogs)
         }
-        fetchPosts()
+        fetchBlogs()
     }, [])
 
     return(
-        <div id="latest-posts-container">
+        <div id="latest-blogs-container">
             {LatestBlogs.map((blog, index) =>(
-                <div key={index} id="blog-display-container" onClick={()=>{navigate("/blog/"+blog.id)}}>
-                    <h1>{blog.title}</h1>
-                    <p>{blog.description}</p>
+                <div key={index}>
+                    <div id="blog-display-container" onClick={()=>{navigate("/blog/"+blog.id)}}>
+                        <h1>{blog.title}</h1>
+                        <p>{blog.description}</p>
+                    </div>
+                    <button onClick={()=>{navigate("edit/"+blog.id)}}>Redigera</button>
+                    <button onClick={()=>{deleteBlogPost(window.sessionStorage.getItem("token"), post.id)}}>Ta bort</button>
                 </div>
             ))}
         </div>
@@ -65,20 +68,9 @@ function Blogmeny(){
                 ()=>{addBlogFunction()}}>
                 Lägg till en blog
             </button>
-            <button onClick={
-                ()=>{editBlogFunction()}}>
-                Redigera en blog
-            </button>
-            <button onClick={
-                ()=>{deleteBlogFunction()}}>
-                Ta bort en blog
-            </button>
             <br />
             <button onClick={()=>{makeBlogPost()}}>
                 Gör ett blogginlägg
-            </button>
-            <button onClick={()=>{deleteBlogPostFunction()}}>
-                Ta bort ett blogginlägg
             </button>
             <DisplayBlogs LatestBlogs={LatestBlogs} setLatestBlogs={setLatestBlogs} BlogPosts={BlogPosts} setBlogPosts={setBlogPosts} />
         </div>

@@ -30,3 +30,7 @@ file: Startwithcapital
 
 function: StartWithCapital - jsx (returns div)
 function: startWithMinimum - js
+
+
+## IMPORTANT
+use person token from useAuth always   (user.token)
