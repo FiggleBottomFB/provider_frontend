@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { verifyToken, personLogin as apiLogin, personLogout as apiLogout } from "../apicalls"; //import user login and logout and verify if it exist
+import { sha256 } from 'js-sha256';
 
 const AuthContext = createContext(null);
 
@@ -31,8 +32,8 @@ export function AuthProvider({ children }) {
 
   // Login function   user
   async function login(username, password) {
-    const data = await apiLogin(username, password);
-    localStorage.setItem("token", data.token);
+    const data = await apiLogin(username, sha256(password));
+    sessionStorage.setItem("token", data.token);
     setUser(data.user);
     return data;
   }
@@ -40,7 +41,7 @@ export function AuthProvider({ children }) {
   // Logout function  user   avilable in authcontext just use  useAuth
   async function logout() {
     await apiLogout();
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
     setUser(null);
   }
 
