@@ -30,7 +30,13 @@ import { RequireAuth } from './Auth/Requireauth'
 import { useApi } from './hooks/useApi'
 
 
-
+//TODONEXT
+/** fix perms in authcontext 
+ * replace most useffects with useapi
+ * 
+ * 
+ * 
+*/
 
 function App() {
   const [count, setCount] = useState(0)
