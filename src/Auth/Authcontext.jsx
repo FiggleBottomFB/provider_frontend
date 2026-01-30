@@ -34,7 +34,7 @@ export function AuthProvider({ children }) {
   async function login(username, password) {
     const data = await apiLogin(username, sha256(password));
     sessionStorage.setItem("token", data.token);
-    setUser(data.user);
+    setUser(data);
     return data;
   }
 
