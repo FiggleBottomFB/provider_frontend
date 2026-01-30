@@ -1,0 +1,23 @@
+#latest-posts-container{
+    height: 85vh;
+    width: 60vw;
+}
+
+#blog-display-container{
+    height: 10rem;
+    background-color: aqua;
+    margin-left: 1rem;
+    border-radius: 25px;
+    padding-top: 0.1rem;
+    padding-left: 1rem;
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+    object-fit: contain; 
+    width: 80%;
+}
+
+#blog-display-container:hover{
+    transition: all 0.2s;
+    transform: scale(1.02);
+    cursor: pointer;
+}

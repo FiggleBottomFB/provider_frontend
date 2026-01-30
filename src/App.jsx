@@ -9,6 +9,7 @@ import Login from './Login'
 import Home from './Home'
 import HomeHeader from './Homeheader'
 
+import Blogmeny from './Blog/Blogmeny'
 import Blog from './Blog/Blog'
 import BlogPost from './Blog/Blogpost'
 import EditBlogPost from './Blog/Editblogpost'
@@ -63,9 +64,10 @@ function App() {
           <Route index element={<Home />} />
 
           <Route path='Blog' element={<BlogContainer/>}>
-            <Route index element={<Blog />} />
-            <Route path=":blogpostid" element={<BlogPost/>} />
-            <Route path="edit/:blogpostid" element={<EditBlogPost/>}/>
+            <Route index element={<Blogmeny />} />
+            <Route path=':blogid' element={<Blog />}></Route>
+            <Route path="blog/:blogpostid" element={<BlogPost/>} />
+            <Route path="blog/edit/:blogpostid" element={<EditBlogPost/>}/>
           </Route>
 
           <Route path='Wiki' element={<WikiContainer/>}>
