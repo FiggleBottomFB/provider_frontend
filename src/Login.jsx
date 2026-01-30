@@ -15,7 +15,7 @@ function Login({userInfo, setUserInfo}){
         const userData = await login(UserName, Password)
         setUserInfo(userData)
         console.log(userData)
-        // sessionStorage.setItem("token", userData.token)  sets in login in authcontext
+        // sessionStorage sets in login in authcontext
         if(!userData.error){
             navigate("/")
         }
