@@ -86,7 +86,7 @@ function App() {
         </Route>
 
 
-        <Route path='/Login' element={<Login/>}/>
+        <Route path='/Login' element={<Login setUserInfo={setUserInfo}/>}/>
         <Route path='/unauthorized' element={<Unauthorized/>}/>
       </Routes>
     </BrowserRouter>

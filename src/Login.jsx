@@ -15,6 +15,7 @@ function Login({userInfo, setUserInfo}){
         const userData = await personLogin(UserName, sha256(Password))
         setUserInfo(userData)
         sessionStorage.setItem("token", userData.token)
+        console.log(userData.token)
         if(!userData.error){
             navigate("/")
         }
