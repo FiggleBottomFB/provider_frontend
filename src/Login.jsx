@@ -1,20 +1,21 @@
 import { useState } from 'react'
 import "./CSS/login.css"
-import './apicalls.js'
-import { getAllPeople, personLogin } from './apicalls.js'
+import { getAllPeople } from './apicalls.js'
 import { useNavigate } from 'react-router'
-import { sha256 } from 'js-sha256';
+import { useAuth } from "./Auth/Authcontext";
 
 function Login({userInfo, setUserInfo}){
+    const { user, login, loading, error } = useAuth();
     const navigate = useNavigate()
     const [UserName, setUserName] = useState("")
     const [Password, setPassword] = useState("")
 
 
     const loginUser = async () =>{
-        const userData = await personLogin(UserName, sha256(Password))
+        const userData = await login(UserName, Password)
         setUserInfo(userData)
-        sessionStorage.setItem("token", userData.token)
+        console.log(userData)
+        // sessionStorage.setItem("token", userData.token)  sets in login in authcontext
         if(!userData.error){
             navigate("/")
         }

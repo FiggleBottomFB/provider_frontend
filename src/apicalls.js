@@ -32,6 +32,7 @@ async function apiFetch(path, options = {}) {
 
 async function getToken() {
   // 1. If token already exists, return it instantly
+  cachedToken=null;
   if (cachedToken) return cachedToken;
 
   // 2. If login is already happening, wait for it
