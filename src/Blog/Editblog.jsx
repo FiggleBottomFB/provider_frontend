@@ -26,8 +26,9 @@ function DisplayEditContainer({Blog, setBlog, Title, setTitle, Description, setD
     <div>
       <button id="back-arrow-button" onClick={()=>{navigate(-1)}}>←</button>
       <div id="edit-post-input-container" className="align-center flex-column">
+        <button onClick={()=>{navigate("../addpost/"+Blog.id)}}>Gör ett inlägg</button>
         <input id="edit-post-title-input" type="text" value={Title} onChange={(e) => {setTitle(e.target.value)}} autoComplete="off"/>
-        <textarea name="" value={Description} id="edit-post-content-input" onChange={(e)=>{setContent(e.target.value)}}></textarea>
+        <textarea name="" value={Description} id="edit-post-content-input" onChange={(e)=>{setDescription(e.target.value)}}></textarea>
         <input type="checkbox" defaultChecked={IsPublic}/>
         <button onClick={()=>{
           editBlog(window.sessionStorage.getItem("token"), Blog.id, {"title": Title, "description": Description})
