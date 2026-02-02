@@ -10,6 +10,7 @@ export function AuthProvider({ children }) {
   const [error, setError] = useState(null);     // auth errors
 
   // Verify token when app mounts
+  //maybe just check the time
   useEffect(() => {
     const controller = new AbortController();
 
@@ -25,24 +26,68 @@ export function AuthProvider({ children }) {
         setLoading(false);
       }
     }
+    console.log("authcontext")
+    //checkAuth();
 
-    checkAuth();
+  
+
+
+
     return () => controller.abort();
   }, []);
+
+  useEffect(()=>{
+
+    async function checkStorage(){
+      setLoading(true);
+      let storedUser = sessionStorage.getItem("user");
+      if (storedUser) {
+        storedUser=JSON.parse(storedUser);
+        if(isTokenValid(storedUser.tokenExpireTime)){
+          
+        } else {
+          storedUser=null;
+          logout()
+        }
+
+      } else {
+        storedUser=null;
+      }
+      setUser(storedUser);
+      
+
+      setLoading(false);
+      console.log("checkstorage", storedUser)
+  
+    }
+    checkStorage();
+    
+
+
+  }, [])
 
   // Login function   user
   async function login(username, password) {
     const data = await apiLogin(username, sha256(password));
-    sessionStorage.setItem("token", data.token);
-    setUser(data);
+    const newdata=buildUser(data);
+    console.log(newdata)
+    if(newdata.role!="guest"){
+      sessionStorage.setItem("user", JSON.stringify(newdata));
+    } else {
+      sessionStorage.removeItem("user");
+    }
+    
+    setUser(newdata);
     return data;
   }
 
   // Logout function  user   avilable in authcontext just use  useAuth
   async function logout() {
-    await apiLogout();
-    sessionStorage.removeItem("token");
-    setUser(null);
+    if(user.token){
+      await apiLogout(user.token);
+    }
+    sessionStorage.removeItem("user");
+    setUser(buildUser(null)); //set user.role to guest
   }
 
   return (
@@ -51,6 +96,31 @@ export function AuthProvider({ children }) {
     </AuthContext.Provider>
   );
 }
+
+function buildUser(userData) {
+  let userRole= "guest"
+  if (userData?.admin!=null || userData?.admin!=undefined){
+  userRole= userData.admin? "admin" : "user";
+  }
+  
+  return {
+    token:userData?.token,
+    tokenExpireTime:userData?.expiresAt,
+    id: userData?.personID,
+    role: userRole,
+  };
+}
+
+function isTokenValid(tokenExpireTime) {
+  if(tokenExpireTime==null){
+    return (false)
+  }
+  const expireDate = new Date(tokenExpireTime.replace(" ", "T"));
+  const now = new Date();
+
+  return expireDate > now;
+}
+
 
 // Hook to use auth anywhere
 export function useAuth() {

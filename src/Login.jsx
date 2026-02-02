@@ -14,7 +14,6 @@ function Login({userInfo, setUserInfo}){
     const loginUser = async () =>{
         const userData = await login(UserName, Password)
         setUserInfo(userData)
-        console.log(userData)
         // sessionStorage sets in login in authcontext
         if(!userData.error){
             navigate("/")
