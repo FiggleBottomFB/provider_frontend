@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
 
 function WikiContainer(){
-    return <div>WikiContainer <Outlet/> </div>
+    return <div> <Outlet/> </div>
 }
 
 export default WikiContainer

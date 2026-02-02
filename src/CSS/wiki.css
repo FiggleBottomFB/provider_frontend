@@ -1,0 +1,41 @@
+#latest-pages-container{
+    width: 50vw;
+    padding: 1rem;
+}
+
+#current-page-title{
+    
+}
+
+#back-arrow-button{
+    height: 2rem;
+    width: 4rem;
+    border-radius: 0.5rem;
+    border: 0rem;
+}
+
+#back-arrow-button:hover{
+    border: 0.1rem solid #666666;
+    transition: 0.2s;
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+
+#page-display-container{
+    height: 10rem;
+    background-color: aqua;
+    border-radius: 25px;
+    padding-top: 0.1rem;
+    padding-left: 1rem;
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+    object-fit: contain; 
+    width: 80%;
+}
+
+#page-display-container:hover{
+    transition: all 0.2s;
+    transform: scale(1.02);
+    cursor: pointer;
+}

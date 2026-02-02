@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { getBlogPost } from "../apicalls";
 import { useParams, useNavigate } from "react-router";
-import { addBlogComment } from "../apicalls";
+import { addBlogComment, deleteBlogComment } from "../apicalls";
 import '.././CSS/blogpost.css'
 import '.././CSS/commonclass.css'
 import DisplayComments from "../Comments";
@@ -21,6 +21,22 @@ function DisplayBlogPost({BlogPost, setBlogPost, Comments, setComments}){
     fetchPost()
   }, [])
 
+  const handleAddComment = async (token, body, content) => {
+    await addBlogComment(token, body, content)
+  
+    const blogPostData = await getBlogPost(token, postid)
+    setBlogPost(blogPostData.fields)
+    setComments(blogPostData.fields.comments)
+  }
+  
+  const handleDeleteComment = async (token, commentId) => {
+    await deleteBlogComment(token, commentId)
+  
+    const blogPostData = await getBlogPost(token, postid)
+    setBlogPost(blogPostData.fields)
+    setComments(blogPostData.fields.comments)
+  }
+
 
   return(
     <div id="blog-post-container">
@@ -37,7 +53,7 @@ function DisplayBlogPost({BlogPost, setBlogPost, Comments, setComments}){
           </div>
           {BlogPost.content}
         </div>
-      <DisplayComments Comments={Comments} addComment={addBlogComment}/>
+      <DisplayComments Comments={Comments} addComment={handleAddComment} addToId={BlogPost.id} deleteComment={handleDeleteComment}/>
       </div>
     </div>
   )
