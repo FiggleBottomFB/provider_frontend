@@ -42,6 +42,7 @@ function Displayadduser({
             <input type="text" name="employeenumber" id="" autoComplete="off" value={EmployeeNumber} onChange={(e)=>{setEmployeeNumber(e.target.value)}} />
             <label htmlFor="isadmincheckbox">Är admin</label>
             <input type="checkbox" name="isadmincheckbox" id="" />
+
             <button onClick={()=>{addPerson(window.sessionStorage.getItem("token")), {"username": "admin1", "passwordhash": sha256("admin1"), "name": "Elias", "email": "elias.moll38@gmail.com", "phonenumber": "0730685210", "employeenumber": "53", "admin": true}}}>Skapa användare</button>
         </div>
     )
