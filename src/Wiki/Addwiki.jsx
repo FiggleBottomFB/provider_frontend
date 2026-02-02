@@ -17,10 +17,10 @@ function DisplayAddContainer({Title, setTitle, Description, setDescription}){
                 <input id="add-title-input" type="text" value={Title} onChange={(e)=>{setTitle(e.target.value)}} autoComplete="off" />
                 <h3>Beskrivning</h3>
                 <textarea name="" id="add-description-input" value={Description} onChange={(e)=>{setDescription(e.target.value)}} rows={15} cols={100} ></textarea>
-                <button id="add-blog-post-button" onClick={()=>{
-                    addWiki(window.sessionStorage.getItem("token"), 7, {"title": Title, "description": Description})
+                <button id="add-wiki-button" onClick={()=>{
+                    addWiki(user.token, user.id, {"title": Title, "description": Description})
                     navigate(-1)
-                    }}>Skapa blogg</button>
+                    }}>Skapa wiki</button>
             </div>
         </div>
     )

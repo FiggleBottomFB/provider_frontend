@@ -30,10 +30,12 @@ function DisplayWikiButton(){
 
 function DisplayWikis({LatestPages, setLatestPages}){
     const navigate = useNavigate()
+    const {user} = useAuth
     useEffect(() => {
         const fetchWikis = async () => {
             const latestBlogData = await getAllWikis(window.sessionStorage.getItem("token"))
             setLatestPages(latestBlogData.wikis)
+            console.log(latestBlogData)
         }
         fetchWikis()
     }, [])
@@ -47,15 +49,15 @@ function DisplayWikis({LatestPages, setLatestPages}){
     }
 
     return(
-        <div id="latest-blogs-container">
+        <div id="latest-wikis-container">
             {LatestPages.map((page, index) =>(
                 <div key={index}>
-                    <div id="blog-display-container" onClick={()=>{navigate("/wiki/"+page.id)}}>
+                    <div id="wiki-display-container" onClick={()=>{navigate("/wiki/"+page.id)}}>
                         <h1>{page.title}</h1>
                         <p>{page.description}</p>
                     </div>
                     <button onClick={()=>{navigate("edit/"+page.id)}}>Redigera</button>
-                    <button onClick={()=>{deleteWiki(window.sessionStorage.getItem("token"), page.id)}}>Ta bort</button>
+                    <button onClick={()=>{deleteWiki(user.token, page.id)}}>Ta bort</button>
                 </div>
             ))}
         </div>
