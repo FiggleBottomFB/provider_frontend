@@ -19,7 +19,7 @@ function DisplayAddContainer({Title, setTitle, Content, setContent}){
                 <input id="add-title-input" type="text" value={Title} onChange={(e)=>{setTitle(e.target.value)}} autoComplete="off" />
                 <h3>Innehåll</h3>
                 <textarea name="" id="add-description-input" value={Content} onChange={(e)=>{setContent(e.target.value)}} rows={15} cols={100}></textarea>
-                <button id="add-blog-post-button" onClick={()=>{addWikiPage(window.sessionStorage.getItem("token"), wikiid, {"title": Title, "content": Content})}}>Skapa sida</button>
+                <button id="add-blog-post-button" onClick={()=>{addWikiPage(user.token, wikiid, {"title": Title, "content": Content})}}>Skapa sida</button>
             </div>
         </div>
     )

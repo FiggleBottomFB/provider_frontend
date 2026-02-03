@@ -3,20 +3,23 @@ import { useNavigate, useParams } from "react-router"
 import { getWiki, linkTags, editWiki } from "../apicalls";
 import '../CSS/commonclass.css'
 import '../CSS/editblog.css'
+import { useAuth } from "../Auth/Authcontext";
 
 
 function DisplayEditContainer({Wiki, setWiki, Title, setTitle, Description, setDescription, Settings, setSettings}){
   const navigate = useNavigate()
   let params = useParams();
   const wikiid = params.wikiid
+  const {user} = useAuth()
+  const [IsPublic, setIsPublic] = useState(Boolean)
 
   useEffect(()=>{
     const fetchWiki = async () =>{ 
-      const wikiData = await getWiki(window.sessionStorage.getItem("token"), wikiid)
+      const wikiData = await getWiki(user.token, wikiid)
       console.log(wikiData)
       setWiki(wikiData.fields)
       setTitle(wikiData.fields.title)
-    //   setIsPublic(wikiData.fields.public)
+      setIsPublic(wikiData.fields.public)
       setDescription(wikiData.fields.description)
       setSettings(wikiData.fields.settings)
     }
@@ -28,10 +31,10 @@ function DisplayEditContainer({Wiki, setWiki, Title, setTitle, Description, setD
       <div id="edit-post-input-container" className="align-center flex-column">
         <button onClick={()=>{navigate("../addpost/"+Wiki.id)}}>Gör en sida</button>
         <input id="edit-post-title-input" type="text" value={Title} onChange={(e) => {setTitle(e.target.value)}} autoComplete="off"/>
-        <textarea name="" value={Description} id="edit-post-content-input" onChange={(e)=>{setDescription(e.target.value)}}></textarea>
+        <textarea name="" value={Description} id="edit-post-content-input" onChange={(e)=>{setDescription(e.target.value)}} rows={15} cols={100}></textarea>
         {/* <input type="checkbox" defaultChecked={IsPublic}/> */}
         <button onClick={()=>{
-          editWiki(window.sessionStorage.getItem("token"), Wiki.id, {"title": Title, "description": Description})
+          editWiki(user.token, Wiki.id, {"title": Title, "description": Description})
           navigate(-1)
         }}>Spara ändringar</button>
       </div>
