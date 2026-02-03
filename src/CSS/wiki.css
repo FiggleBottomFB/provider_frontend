@@ -39,3 +39,73 @@
     transform: scale(1.02);
     cursor: pointer;
 }
+
+#latest-wikis-container{
+    width: 60vw;
+}
+
+#wiki-display-container{
+    height: 10rem;
+    background-color: aqua;
+    margin-left: 1rem;
+    border-radius: 25px;
+    padding-top: 0.1rem;
+    padding-left: 1rem;
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+    object-fit: contain; 
+    width: 80%;
+}
+
+#wiki-display-container:hover{
+    transition: all 0.2s;
+    transform: scale(1.02);
+    cursor: pointer;
+}
+
+#add-page-button{
+    height: 2rem;
+    width: 6rem;
+    border-radius: 0.5rem;
+    border: 0rem;
+}
+
+#add-page-button:hover{
+    border: 0.1rem solid #666666;
+    transition: 0.2s;
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+
+#wiki-page-version-container{
+    margin-top: 1rem;
+    margin-left: 1rem;
+    border-top: 0.1rem #666666 solid;
+}
+
+#wiki-menu-buttons-container{
+    padding: 1rem;
+}
+
+.wiki-choice-button:hover{
+    cursor: pointer;
+    background-color: #dadada;
+}
+.wiki-choice-button{
+    width: 15vw;
+    height: 30%;
+    border-radius: 0.5rem;
+    border: 0rem;
+}
+
+
+#add-wiki-button{
+    border-radius: 0.5rem;
+    border: 0rem;
+    height: 2rem;
+}
+#add-wiki-button:hover{
+    cursor: pointer;
+    background-color: #dadada;
+}

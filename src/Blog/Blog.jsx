@@ -26,6 +26,7 @@ function DisplayBlogPosts({Posts, setPosts, Blog, setBlog}){
         }
         fetchPosts()
     }, [])
+    console.log(Posts)
 
     return(
         <div id="blog-full-container">

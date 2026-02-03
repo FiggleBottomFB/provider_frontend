@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import { useNavigate, useParams } from "react-router";
-import { getWikiPages, getWiki, deleteBlogPost } from "../apicalls";
+import { getWikiPages, getWiki, deleteBlogPost, deleteWikiPage } from "../apicalls";
 import '../CSS/wiki.css'
 import '../CSS/commonclass.css'
 import { useAuth } from '../Auth/Authcontext'
@@ -9,10 +9,11 @@ function DisplayWikiPages({Pages, setPages, Wiki, setWiki}){
     const navigate = useNavigate()
     let params = useParams();
     const wikiid = params.wikiid
+    const {user} = useAuth()
 
     useEffect(() => {
         const fetchBlog = async () => {
-            const currentWiki = await getWiki(window.sessionStorage.getItem("token"), wikiid)
+            const currentWiki = await getWiki(user.token, wikiid)
             setWiki(currentWiki.fields)
         }
         fetchBlog()
@@ -21,7 +22,7 @@ function DisplayWikiPages({Pages, setPages, Wiki, setWiki}){
 
     useEffect(() => {
         const fetchPosts = async () => {
-            const latestWikiPages = await getWikiPages(window.sessionStorage.getItem("token"), wikiid)
+            const latestWikiPages = await getWikiPages(user.token, wikiid)
             setPages(latestWikiPages.pages)
         }
         fetchPosts()
@@ -40,11 +41,12 @@ function DisplayWikiPages({Pages, setPages, Wiki, setWiki}){
         <div id="wiki-full-container">
             <div id="latest-pages-container">
                 <button id="back-arrow-button" onClick={()=>{navigate("/wiki")}}>←</button>
+                <button id="add-page-button" onClick={()=>{navigate("../addpost/"+Wiki.id)}}>Gör en sida</button>
                 <h1 id="current-wiki-title">{Wiki.title}</h1>
                 {
                     Pages.map((page, index)=>(
                         <div key={index}>
-                            <div id="page-display-container" onClick={()=>{navigate("/wiki/wiki/"+page.id)}}>
+                            <div id="page-display-container" onClick={()=>{navigate("/wiki/page/"+page.id)}}>
                                 <h1>{page.title}</h1>
                                 {
                                     page.tags.map((tag, tagindex)=>(
@@ -54,8 +56,8 @@ function DisplayWikiPages({Pages, setPages, Wiki, setWiki}){
                                     ))
                                 }
                             </div>
-                            <button onClick={()=>{navigate(".././wiki/edit/"+post.id)}}>Redigera</button>
-                            <button onClick={()=>{deleteBlogPost(window.sessionStorage.getItem("token"), page.id)}}>Ta bort</button>
+                            <button onClick={()=>{navigate(".././edit/page/"+page.id)}}>Redigera</button>
+                            <button onClick={()=>{deleteWikiPage(user.token, page.id)}}>Ta bort</button>
                         </div>
                     ))
                 }
