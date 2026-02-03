@@ -19,12 +19,15 @@ async function apiFetch(path, options = {}) {
   if (personToken) headers["X-Person-Token"] = personToken;
   if (body && !isFormData) headers["Content-Type"] = "application/json";
 
+  console.log(JSON.stringify(body))
+
   const res = await fetch(API_BASE + path, {
     method,
     headers,
     signal,
     body: body ? (isFormData ? body : JSON.stringify(body)) : undefined,
   });
+
 
   return await res.json();
 }
@@ -283,3 +286,14 @@ export const linkTags = ( personToken, payload, options = {}) =>
 
 export const unlinkTags = ( personToken, payload, options = {}) =>
   apiFetch("/api/tag/unlink", { method: "POST",  personToken, body: payload , ...options,});
+
+
+// {
+//   "calID":7,
+//   "fields":{
+//       "title":"Mitt event",
+//       "description":"Mitt första event",
+//       "datetime":"2026-02-16 08:00:00",
+//       "duration":"07:22:11"
+//   }
+// }
