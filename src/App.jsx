@@ -46,7 +46,7 @@ function App() {
   const [count, setCount] = useState(0)
   const [i, ia] = useState(0)
   const [UserInfo, setUserInfo]= useState([])
-  console.log(sha256("admin1"))
+  console.log(sha256("a"))
   // const testuseapi=useApi(() => verifyToken(), []);
   // if(testuseapi.loading){return <div>Loading</div>}
   // if(testuseapi.data){
