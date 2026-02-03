@@ -287,13 +287,3 @@ export const linkTags = ( personToken, payload, options = {}) =>
 export const unlinkTags = ( personToken, payload, options = {}) =>
   apiFetch("/api/tag/unlink", { method: "POST",  personToken, body: payload , ...options,});
 
-
-// {
-//   "calID":7,
-//   "fields":{
-//       "title":"Mitt event",
-//       "description":"Mitt första event",
-//       "datetime":"2026-02-16 08:00:00",
-//       "duration":"07:22:11"
-//   }
-// }
