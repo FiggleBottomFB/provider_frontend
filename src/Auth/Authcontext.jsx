@@ -26,10 +26,7 @@ export function AuthProvider({ children }) {
         setLoading(false);
       }
     }
-    console.log("authcontext")
     //checkAuth();
-
-  
 
 
 
