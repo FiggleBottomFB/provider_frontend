@@ -8,32 +8,27 @@ import { useAuth } from '../Auth/Authcontext';
 
 function DisplayWikiButton(){
     const navigate = useNavigate()
-    useEffect(()=>{
-        const fetchWikis = async () =>{
-            const verifyAlreadyHaveWiki = await getAllWikis(window.sessionStorage("token"))
-            const { user } = useAuth()
-            verifyAlreadyHaveWiki.array.forEach(wiki => {
-                if(wiki.id == user.id){
-                    return
-                }
-            });
-        }
-        // fetchWikis()
-    }, [])
+    const {user} = useAuth()
+
+    if(user.role != "admin"){
+        return
+    }
 
     return(
         <div>
-            <button onClick={()=>{navigate("add")}}>Skapa en wiki</button>
+            <button id="add-wiki-button" onClick={()=>{navigate("add")}}>Skapa en wiki</button>
         </div>
     )
 }
 
 function DisplayWikis({LatestPages, setLatestPages}){
     const navigate = useNavigate()
+    const {user} = useAuth()
     useEffect(() => {
         const fetchWikis = async () => {
-            const latestBlogData = await getAllWikis(window.sessionStorage.getItem("token"))
-            setLatestPages(latestBlogData.wikis)
+            const latestWikiData = await getAllWikis(user.token)
+            setLatestPages(latestWikiData.wikis)
+            console.log(latestWikiData)
         }
         fetchWikis()
     }, [])
@@ -47,15 +42,17 @@ function DisplayWikis({LatestPages, setLatestPages}){
     }
 
     return(
-        <div id="latest-blogs-container">
+        <div id="latest-wikis-container">
             {LatestPages.map((page, index) =>(
-                <div key={index}>
-                    <div id="blog-display-container" onClick={()=>{navigate("/wiki/"+page.id)}}>
+                <div key={index} id="wiki-container" className='flex-row'>
+                    <div id="wiki-display-container" onClick={()=>{navigate("/wiki/"+page.id)}}>
                         <h1>{page.title}</h1>
                         <p>{page.description}</p>
                     </div>
-                    <button onClick={()=>{navigate("edit/"+page.id)}}>Redigera</button>
-                    <button onClick={()=>{deleteWiki(window.sessionStorage.getItem("token"), page.id)}}>Ta bort</button>
+                    <div id="wiki-menu-buttons-container" className='flex-column justify-around'>
+                        <button className="wiki-choice-button" onClick={()=>{navigate("edit/"+page.id)}}>Redigera</button>
+                        <button className="wiki-choice-button" onClick={()=>{deleteWiki(user.token, page.id)}}>Ta bort</button>
+                    </div>
                 </div>
             ))}
         </div>

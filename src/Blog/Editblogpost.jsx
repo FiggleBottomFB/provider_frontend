@@ -18,18 +18,6 @@ function DisplayEditContainer({}){
   const postid = params.blogpostid
   const {user}=useAuth();
 
-  // useEffect(()=>{
-  //   const fetchPost = async () =>{ 
-  //     const blogPostData = await getBlogPost(window.sessionStorage.getItem("token"), postid)
-  //     setBlogPost(blogPostData.fields)
-  //     setTitle(blogPostData.fields.title)
-  //     // setTags(blogPostData.fields.tags)
-  //     setContent(blogPostData.fields.content)
-  //     setSettings(blogPostData.fields.settings)
-  //   }
-  //   fetchPost()
-  // }, [])
-
 
     // Fetch post 
     const fetchBlogPost = async ({ signal }) => {

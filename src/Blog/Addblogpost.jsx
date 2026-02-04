@@ -11,6 +11,8 @@ function DisplayAddContainer({Title, setTitle, Content, setContent}){
     const blogid = param.blogid
     const {user} = useAuth()
 
+    const [Tags, setTags] = useState([])
+    const [Tag, setTag] = useState("")
     return(
         <div>
             <button onClick={()=>{navigate(-1)}}>←</button>
@@ -19,7 +21,22 @@ function DisplayAddContainer({Title, setTitle, Content, setContent}){
                 <input id="add-title-input" type="text" value={Title} onChange={(e)=>{setTitle(e.target.value)}} autoComplete="off" />
                 <h3>Innehåll</h3>
                 <textarea name="" id="add-description-input" value={Content} onChange={(e)=>{setContent(e.target.value)}} rows={15} cols={100}></textarea>
-                <button id="add-blog-post-button" onClick={()=>{addBlogPost(user.token, blogid, {"title": Title, "content": Content})}}>Skapa inlägg</button>
+
+                {/* <form action="" onSubmit={(e)=>{
+                    e.preventDefault()
+                    setTags([...Tags, Tag])
+                    }}>
+                    <h3>Lägg till en tagg</h3>
+                    <input id="add-title-input" type="text" value={Tag} onChange={(e)=>{setTag(e.target.value)}} autoComplete="off" />
+                    <button type="submit">Lägg till tagg</button>
+                </form>
+                {
+                    Tags.map((tag, index)=>(
+                        <div key={index}><p>{tag}</p></div>
+                    ))
+                } */}
+
+                <button id="add-blog-post-button" onClick={()=>{addBlogPost(user.token, blogid, {"title": Title, "content": Content, "tags": Tags})}}>Skapa inlägg</button>
             </div>
         </div>
     )

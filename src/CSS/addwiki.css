@@ -1,0 +1,37 @@
+#person-container{
+    width: 10%;
+}
+
+
+#input-container{
+    width: 80vw;
+}
+
+#back-arrow-button{
+    height: 2rem;
+    width: 4rem;
+    border-radius: 0.5rem;
+    border: 0rem;
+}
+
+#back-arrow-button:hover{
+    border: 0.1rem solid #666666;
+    transition: 0.2s;
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+#choose-person-container{
+    border: 0.05rem #666666 solid;
+    margin: 1rem;
+    padding: 1rem;
+}
+
+#person-container{
+    border-top: 0.05rem #666666 solid;
+    width: 100%;
+}
+
+#choose-person-button:hover{
+    cursor: pointer;
+}
