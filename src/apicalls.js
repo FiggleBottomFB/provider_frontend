@@ -13,7 +13,6 @@ async function apiFetch(path, options = {}) {
   if (!skipAuth) {
     const token = await getToken();
     headers["Authorization"] = "Bearer " + token;
-    console.log(token)
   }
 
   if (personToken) headers["X-Person-Token"] = personToken;

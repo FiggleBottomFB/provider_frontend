@@ -19,10 +19,18 @@ export function useApi(apiFunction, deps = [],enabled=true) {
         const result = await apiFunction({
           signal: controller.signal,
         });
+        console.log(result)
 
-        if (active) {
+
+
+        if (active && !(result?.error)) {
           setData(result);
+        } 
+        //error
+        else{
+          setError(result.error)
         }
+
       } catch (err) {
         if (err.name === "AbortError") return;
 
