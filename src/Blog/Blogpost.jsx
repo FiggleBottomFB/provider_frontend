@@ -7,6 +7,7 @@ import '.././CSS/commonclass.css'
 import DisplayComments from "../Comments";
 import { useAuth } from "../Auth/Authcontext";
 import { useApi } from "../hooks/useApi";
+import LoadingAndErrorHandler from "../LoadingAndErrorhandler";
 
 
 function DisplayBlogPost({}){
@@ -35,7 +36,7 @@ function DisplayBlogPost({}){
   const handleAddComment = async (token, body, content) => {
     await addBlogComment(token, body, content)
   
-    setRefreshBlog(1)
+    setRefreshBlog(1) //test for refreshing a get (blogPostRequest)
   }
   
   const handleDeleteComment = async (token, commentId) => {
@@ -44,8 +45,8 @@ function DisplayBlogPost({}){
     setRefreshBlog(1)
   }
 
-  if (blogPostRequest.loading ) return <p>Loading...</p>;
-  if (blogPostRequest.error) return <p>Error loading blog: {blogPostRequest.error}</p>;
+
+  if (blogPostRequest.loading || blogPostRequest.error) return <LoadingAndErrorHandler Loading={blogPostRequest.loading} Error={blogPostRequest.error} />
   
 
   return(
