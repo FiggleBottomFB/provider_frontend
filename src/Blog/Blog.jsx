@@ -4,66 +4,92 @@ import { getBlogPosts, getBlog, deleteBlogPost } from "../apicalls";
 import '../CSS/blog.css'
 import '../CSS/commonclass.css'
 import { useAuth } from '../Auth/Authcontext'
+import { useApi } from "../hooks/useApi";
 
-function DisplayBlogPosts({Posts, setPosts, Blog, setBlog}){
+function DisplayBlogPosts({}){
     const navigate = useNavigate()
     let params = useParams();
     const blogid = params.blogid
-
-    useEffect(() => {
-        const fetchBlog = async () => {
-            const currentBlog = await getBlog(window.sessionStorage.getItem("token"), blogid)
-            setBlog(currentBlog.fields)
-        }
-        fetchBlog()
-    }, [])
+    const {user} = useAuth();
 
 
-    useEffect(() => {
-        const fetchPosts = async () => {
-            const latestBlogPosts = await getBlogPosts(window.sessionStorage.getItem("token"), blogid)
-            setPosts(latestBlogPosts.posts)
-        }
-        fetchPosts()
-    }, [])
+/*BLOG*/
+
+const fetchBlog = async ({ signal }) => {
+    return await getBlog(user.token, blogid, signal);
+  };
+  
+  const blogRequest = useApi(fetchBlog, [user, blogid], !!user);
+  
+/*POST*/
+
+const fetchPosts = async ({ signal }) => {
+    return await getBlogPosts(user.token, blogid,"", signal);
+    };
+    
+    const postRequest = useApi(fetchPosts, [user, blogid], !!user);
+    //postRequest.data.post
+
+
+
+if (blogRequest.loading ) return <p>Loading...</p>;
+if (blogRequest.error) return <p>Error loading blog: {blogRequest.error}</p>;
 
     return(
         <div id="blog-full-container">
             <div id="latest-posts-container">
                 <button id="back-arrow-button" onClick={()=>{navigate("/blog")}}>←</button>
-                <h1 id="current-blog-title">{Blog.title}</h1>
-                {
-                    Posts.map((post, index)=>(
-                        <div key={index}>
-                            <div id="post-display-container" onClick={()=>{navigate("/blog/blog/"+post.id)}}>
-                                <h1>{post.title}</h1>
-                                {
-                                    post.tags.map((tag, tagindex)=>(
-                                        <p key={tagindex}>
-                                            {tag}
-                                        </p>
-                                    ))
-                                }
-                            </div>
-                            <button onClick={()=>{navigate(".././blog/edit/"+post.id)}}>Redigera</button>
-                            <button onClick={()=>{deleteBlogPost(window.sessionStorage.getItem("token"), post.id)}}>Ta bort</button>
-                        </div>
-                    ))
-                }
+                <BlogTitle title={blogRequest?.data.fields.title}/>
+                <BlogPostsContainer postRequest={postRequest}/>
             </div>
         </div>
     )
 }
 
+function BlogTitle({title}){
+
+    return (
+        <h1 id="current-blog-title">{title}</h1>
+    )
+}
+
+function BlogPostsContainer({postRequest}){
+    const {user} = useAuth();
+    const navigate = useNavigate()
+
+
+  if (postRequest.loading ) return <p>Loading...</p>;
+  if (postRequest.error) return <p>Error loading posts: {postRequest.error}</p>;
+
+  return (
+    postRequest.data.posts.map((post, index)=>(
+            <div key={index}>
+                <div id="post-display-container" onClick={()=>{navigate("/blog/blog/"+post.id)}}>
+                    <h1>{post.title}</h1>
+                    {
+                        post.tags.map((tag, tagindex)=>(
+                            <p key={tagindex}>
+                                {tag}
+                            </p>
+                        ))
+                    }
+                </div>
+                <button onClick={()=>{navigate(".././blog/edit/"+post.id)}}>Redigera</button>
+                <button onClick={()=>{deleteBlogPost(user?.token, post.id)}}>Ta bort</button>
+            </div>
+        ))
+    )   
+}
+
+
 
 function Blog(){
-    const {user} = useAuth()
-    const [Posts, setPosts] = useState([])
-    const [Blog, setBlog] = useState([])
+    // const [Posts, setPosts] = useState([])
+    // const [Blog, setBlog] = useState([])
 
     return(
         <div>
-            <DisplayBlogPosts Posts={Posts} setPosts={setPosts} Blog={Blog} setBlog={setBlog}/>
+            <DisplayBlogPosts />
         </div>
     )
 }
