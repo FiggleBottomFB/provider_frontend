@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { getAllBlogs, addBlog, deleteBlog, editBlog, getBlogPosts, addBlogPost } from '../apicalls';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { data, Outlet, useNavigate } from 'react-router-dom';
 import '.././CSS/blogmeny.css'
 import '.././CSS/commonclass.css'
 import { useAuth } from '../Auth/Authcontext';
+import { useApi } from '../hooks/useApi';
 
 
+//ADMIN ONLY MOVE AWAY FROMHERE
 function DisplayBlogButton(){
     const navigate = useNavigate()
     useEffect(()=>{
@@ -28,15 +30,12 @@ function DisplayBlogButton(){
     )
 }
 
-function DisplayBlogs({LatestBlogs, setLatestBlogs}){
+
+
+
+function DisplayBlogs({LatestBlogs}){
     const navigate = useNavigate()
-    useEffect(() => {
-        const fetchBlogs = async () => {
-            const latestBlogData = await getAllBlogs(window.sessionStorage.getItem("token"))
-            setLatestBlogs(latestBlogData.blogs)
-        }
-        fetchBlogs()
-    }, [])
+    const {user}= useAuth()
 
     return(
         <div id="latest-blogs-container">
@@ -47,7 +46,7 @@ function DisplayBlogs({LatestBlogs, setLatestBlogs}){
                         <p>{blog.description}</p>
                     </div>
                     <button onClick={()=>{navigate("edit/"+blog.id)}}>Redigera</button>
-                    <button onClick={()=>{deleteBlog(window.sessionStorage.getItem("token"), post.id)}}>Ta bort</button>
+                    <button onClick={()=>{deleteBlog(user.token, post.id)}}>Ta bort</button>
                 </div>
             ))}
         </div>
@@ -56,14 +55,25 @@ function DisplayBlogs({LatestBlogs, setLatestBlogs}){
 
 
 function Blogmeny(){
-    const [BlogPosts, setBlogPosts] = useState([])
     const [LatestBlogs, setLatestBlogs] = useState([])
     const [SearchQuery, setSearchQuery] = useState("")
+    const {user} = useAuth()
+    
+
+    const fetchBlogs = async ({ signal }) => {
+       return await getAllBlogs(user.token,"",signal)
+    }
+    
+    const blogRequest = useApi(fetchBlogs, [user], !!user?.token);
+
+    if (blogRequest.loading ) return <p>Loading...</p>;
+    if (blogRequest.error) return <p>Error loading blog: {blogRequest.error}</p>;
+   
 
     return (
         <div>
-            <DisplayBlogButton />
-            <DisplayBlogs LatestBlogs={LatestBlogs} setLatestBlogs={setLatestBlogs} BlogPosts={BlogPosts} setBlogPosts={setBlogPosts} />
+            {/* <DisplayBlogButton /> */}
+            <DisplayBlogs LatestBlogs={blogRequest.data.blogs} />
         </div>
     )
 }

@@ -14,13 +14,16 @@ async function apiFetch(path, options = {}) {
     const token = await getToken();
     headers["Authorization"] = "Bearer " + token;
     // console.log(token)
+
   }
 
   if (personToken) headers["X-Person-Token"] = personToken;
   if (body && !isFormData) headers["Content-Type"] = "application/json";
 
+
   // console.log(JSON.stringify(body))
   // console.log(path)
+
   const res = await fetch(API_BASE + path, {
     method,
     headers,

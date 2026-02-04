@@ -28,7 +28,6 @@ function DisplayWikis({LatestPages, setLatestPages}){
         const fetchWikis = async () => {
             const latestWikiData = await getAllWikis(user.token)
             setLatestPages(latestWikiData.wikis)
-            console.log(latestWikiData)
         }
         fetchWikis()
     }, [])

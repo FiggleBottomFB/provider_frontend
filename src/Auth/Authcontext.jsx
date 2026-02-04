@@ -26,10 +26,7 @@ export function AuthProvider({ children }) {
         setLoading(false);
       }
     }
-    console.log("authcontext")
     //checkAuth();
-
-  
 
 
 
@@ -87,7 +84,7 @@ export function AuthProvider({ children }) {
       await apiLogout(user.token);
     }
     sessionStorage.removeItem("user");
-    setUser(buildUser(null)); //set user.role to guest
+    setUser(null); //set user to null
   }
 
   return (

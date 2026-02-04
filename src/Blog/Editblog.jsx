@@ -3,54 +3,84 @@ import { useNavigate, useParams } from "react-router"
 import { getBlog, linkTags, editBlog } from "../apicalls";
 import '../CSS/commonclass.css'
 import '../CSS/editblog.css'
+import { useAuth } from "../Auth/Authcontext";
+import { useApi } from "../hooks/useApi";
 
 
-function DisplayEditContainer({Blog, setBlog, Title, setTitle, Description, setDescription, Settings, setSettings, IsPublic, setIsPublic}){
-  const navigate = useNavigate()
-  let params = useParams();
-  const blogid = params.blogid
+function DisplayEditContainer() {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const { blogid } = useParams();
 
-  useEffect(()=>{
-    const fetchBlog = async () =>{ 
-      const blogData = await getBlog(window.sessionStorage.getItem("token"), blogid)
-      console.log(blogData)
-      setBlog(blogData.fields)
-      setTitle(blogData.fields.title)
-      setIsPublic(blogData.fields.public)
-      setDescription(blogData.fields.description)
-      setSettings(blogData.fields.settings)
+  // Form states
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [isPublic, setIsPublic] = useState(false);
+
+  // Fetch blog 
+  const fetchBlog = async ({ signal }) => {
+    return await getBlog(user.token, blogid, signal);
+  };
+
+  const { data, loading, error } = useApi(fetchBlog, [user], !!user?.token);
+
+  // When blog fetched fill form
+  useEffect(() => {
+    if (data) {
+      setTitle(data.fields.title);
+      setDescription(data.fields.description);
+      setIsPublic(data.fields.public);
     }
-    fetchBlog()
-  }, [])
-  return(
+  }, [data]);
+
+  // Save handler
+  const handleSave = async () => {
+    await editBlog(user.token, blogid, {
+      title,
+      description,
+      public: isPublic,
+    });
+
+    navigate(-1);
+  };
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error loading blog: {error}</p>;
+
+  return (
     <div>
-      <button id="back-arrow-button" onClick={()=>{navigate(-1)}}>←</button>
-      <div id="edit-post-input-container" className="align-center flex-column">
-        <button onClick={()=>{navigate("../addpost/"+Blog.id)}}>Gör ett inlägg</button>
-        <input id="edit-post-title-input" type="text" value={Title} onChange={(e) => {setTitle(e.target.value)}} autoComplete="off"/>
-        <textarea name="" value={Description} id="edit-post-content-input" onChange={(e)=>{setDescription(e.target.value)}} rows={15} cols={100}></textarea>
-        <input type="checkbox" defaultChecked={IsPublic}/>
-        <button onClick={()=>{
-          editBlog(window.sessionStorage.getItem("token"), Blog.id, {"title": Title, "description": Description})
-          navigate(-1)
-        }}>Spara ändringar</button>
-      </div>
+      
+      <EditBlogMenu title={title} setTitle={setTitle} description={description} setDescription={setDescription} isPublic={isPublic} setIsPublic={setIsPublic} onSave={handleSave}/>
     </div>
-  )
+  );
+}
+
+function EditBlogMenu({title, setTitle, description, setDescription, isPublic, setIsPublic, onSave}) {
+
+  return (
+    <form id="edit-post-input-container" className="align-center flex-column"
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSave();
+    }}>
+      <input id="edit-post-title-input" type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
+      <textarea id="edit-post-content-input" value={description} onChange={(e) => setDescription(e.target.value)}/>
+      <label>
+        Public
+        <input type="checkbox" checked={isPublic} onChange={(e) => setIsPublic(e.target.checked)}/>
+      </label>
+      <button type="submit">Spara ändringar</button>
+    </form>
+  );
 }
 
 
 function EditBlog(){
-  const [Blog, setBlog] = useState([])
-  const [IsPublic, setIsPublic] = useState(Boolean)
-  const [Title, setTitle] = useState("")
-  const [Description, setDescription] = useState("")
-  const [Settings, setSettings] = useState([])
-
-
+  const navigate = useNavigate()
   return (
     <div>
-      <DisplayEditContainer Blog={Blog} setBlog={setBlog} Title={Title} setTitle={setTitle} Description={Description} setDescription={setDescription} Settings={Settings} setSettings={setSettings} IsPublic={IsPublic} setIsPublic={setIsPublic}/>
+      <button id="back-arrow-button" onClick={() => navigate(-1)}>←</button>
+      <DisplayEditContainer />
     </div>
   )
 }
