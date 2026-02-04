@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { useNavigate, useParams } from "react-router"
-import { getWikiPage, linkTags, editWikiPage } from "../apicalls";
+import { getWikiPage, linkTags, editWikiPage, unlinkTags } from "../apicalls";
 import '../CSS/commonclass.css'
 import '../CSS/editwiki.css'
 import { useAuth } from "../Auth/Authcontext";
@@ -13,6 +13,7 @@ function DisplayEditContainer({WikiPage, setWikiPage, Title, setTitle, Content, 
   const pageid = params.wikipageid
   const {user} = useAuth()
   const [Tags, setTags] = useState([])
+  const [Tag, setTag] = useState("")
 
   useEffect(()=>{
     const fetchPost = async () =>{ 
@@ -34,10 +35,22 @@ function DisplayEditContainer({WikiPage, setWikiPage, Title, setTitle, Content, 
       <div id="edit-page-input-container" className="align-center flex-column">
         <input id="edit-page-title-input" type="text" value={Title} onChange={(e) => {setTitle(e.target.value)}} autoComplete="off"/>
         <textarea name="" value={Content} id="edit-page-content-input" onChange={(e)=>{setContent(e.target.value)}} rows={15} cols={100}></textarea>
+        <form action="" onSubmit={(e)=>{
+            e.preventDefault()
+            setTags([...Tags, Tag])
+            }}>
+            <h3>Lägg till en tagg</h3>
+            <input id="add-title-input" type="text" value={Tag} onChange={(e)=>{setTag(e.target.value)}} autoComplete="off" />
+            <button type="submit">Lägg till tagg</button>
+        </form>
         <div>
             {
               Tags.map((tag, index)=>(
-                <p key={index}>{tag}</p>
+                <div key={index} className="flex-row align-center">
+                  <p>{tag}</p>
+                  <button id="delete-tag-button" onClick={()=>{
+                    unlinkTags(user.token, {"wikipageID": pageid, "tags": [tag]})
+                }}>x</button></div>
               ))
             }
           </div>

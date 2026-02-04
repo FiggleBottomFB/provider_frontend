@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { addWikiComment, deleteWikiComment, getWikiPage, getWikiPages } from "../apicalls";
 import { useParams, useNavigate } from "react-router";
 import { addBlogComment, deleteBlogComment } from "../apicalls";
-import '.././CSS/blogpost.css'
+import '.././CSS/wiki.css'
 import '.././CSS/commonclass.css'
 import DisplayComments from "../Comments";
 import WikiPageHistory from "./Wikipagehistory";
@@ -90,7 +90,7 @@ function DisplayWikiPage({}){
     setWikiPage(wikiPageData.fields)
     setComments(wikiPageData.fields.comments)
   }
-
+  console.log(WikiPage)
   return(
     <div id="wiki-page-container">
       <button id="back-arrow-button" onClick={()=>{navigate(-1)}}>←</button>
@@ -104,7 +104,7 @@ function DisplayWikiPage({}){
               ))
             } */}
           </div>
-          <p>{linkWikiContent(WikiPage.content, WikiPages)}</p>
+          <p id="wiki-content-container">{linkWikiContent(WikiPage.content, WikiPages)}</p>
         </div>
       <DisplayComments Comments={Comments} addComment={handleAddComment} addToId={pageid} deleteComment={handleDeleteComment} addToString={"wikipageID"}/>
 

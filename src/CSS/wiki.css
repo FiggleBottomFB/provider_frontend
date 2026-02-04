@@ -1,3 +1,7 @@
+#wiki-full-container{
+
+}
+
 #latest-pages-container{
     width: 50vw;
     padding: 1rem;
@@ -32,6 +36,7 @@
     margin-top: 0.5rem;
     object-fit: contain; 
     width: 80%;
+    overflow-y: scroll;
 }
 
 #page-display-container:hover{
@@ -108,4 +113,30 @@
 #add-wiki-button:hover{
     cursor: pointer;
     background-color: #dadada;
+}
+
+
+#wiki-content-container{
+    width: 80%;
+    border-radius: 1rem;
+    border: 0.05rem #666666 solid;
+    padding: 1rem;
+    line-height: 1.25rem;
+}
+
+#go-to-wiki-page{
+    background-color: #ebebeb;
+    margin-top: 1rem;
+    border-radius: 1rem;
+    overflow-y: hidden;
+    padding-left: 0.5rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+}
+#go-to-wiki-page:hover{
+    cursor: pointer;
+    background-color: #e0e0e0;
+    transition: 0.1s;
+    transform: scale(1.02);
 }
