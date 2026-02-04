@@ -1,0 +1,12 @@
+#delete-tag-button{
+    height: 50%;
+    border-radius: 50%;
+    border: 0px;
+    margin-left: 1rem;
+}
+#delete-tag-button:hover{
+    cursor: pointer;
+    background-color: aliceblue;
+    transition: 0.2s;
+    transform: scale(1.1);
+}

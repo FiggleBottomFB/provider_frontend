@@ -58,7 +58,6 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Sidebar/>
         <Routes>
           <Route path='/' element={<HomeHeader/>}>
             <Route index element={<Home />} />

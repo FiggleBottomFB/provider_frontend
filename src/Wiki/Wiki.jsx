@@ -4,6 +4,8 @@ import { getWikiPages, getWiki, deleteBlogPost, deleteWikiPage } from "../apical
 import '../CSS/wiki.css'
 import '../CSS/commonclass.css'
 import { useAuth } from '../Auth/Authcontext'
+import { useApi } from "../hooks/useApi";
+import Sidebar from "../Sidebar";
 
 function DisplayWikiPages({Pages, setPages, Wiki, setWiki}){
     const navigate = useNavigate()
@@ -32,6 +34,7 @@ function DisplayWikiPages({Pages, setPages, Wiki, setWiki}){
         return(
             <div>
                 <button id="back-arrow-button" onClick={()=>{navigate("/wiki")}}>←</button>
+                <button id="add-page-button" onClick={()=>{navigate("../addpost/"+Wiki.id)}}>Gör en sida</button>
                 <p>Inga sidor hittades i denna wiki</p>
             </div>
         )
@@ -50,7 +53,7 @@ function DisplayWikiPages({Pages, setPages, Wiki, setWiki}){
                                 <h1>{page.title}</h1>
                                 {
                                     page.tags.map((tag, tagindex)=>(
-                                        <p key={tagindex}>
+                                        <p key={tagindex} id="tag-container">
                                             {tag}
                                         </p>
                                     ))
@@ -66,14 +69,54 @@ function DisplayWikiPages({Pages, setPages, Wiki, setWiki}){
     )
 }
 
+function SearchTags(){
+    const [SearchQuery, setSearchQuery] = useState("")
+    const [CurrentWikiId, setCurrentWikiId] = useState(0)
+    const [SearchedPages, setSearchedPages] = useState([])
+    const {user} = useAuth()
+    let params = useParams();
+    const wikiid = params.wikiid
+    const navigate = useNavigate()
+
+    const fetchCurrentWiki = async ({signal}) =>{
+        return await getWiki(user.token, wikiid, signal)
+    }
+    let CurrentWikiFetch = useApi(fetchCurrentWiki, [user, wikiid], !!user)
+
+    if(CurrentWikiFetch.loading) return <p>Laddar...</p>
+    if(CurrentWikiFetch.error) return <p>Fel vid hämtning av nuvarande wikisida...</p>
+
+    return(
+        <div>
+            <input placeholder="Sök efter taggar" type="text" onChange={async (e)=>{
+                setSearchQuery(e.target.value)
+                let dat4 = await getWikiPages(user.token, CurrentWikiFetch.data.fields.id, `&tag=${encodeURIComponent(e.target.value)}`)
+                console.log(dat4.pages)
+                setSearchedPages(dat4.pages)
+                }}/>
+            <div>
+                {
+                    SearchedPages.map((page, index)=>(
+                        <div id="go-to-wiki-page" key={index} onClick={()=>{
+                            navigate("/wiki/page/"+page.id)
+                            }}>
+                            {page.title}
+                        </div>
+                    ))
+                }
+                </div>
+        </div>
+    )
+}
+
 
 function Wiki(){
-    const {user} = useAuth()
     const [Pages, setPages] = useState([])
     const [Wiki, setWiki] = useState([])
 
     return(
         <div>
+            <Sidebar><SearchTags/></Sidebar>
             <DisplayWikiPages Pages={Pages} setPages={setPages} Wiki={Wiki} setWiki={setWiki}/>
         </div>
     )

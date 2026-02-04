@@ -3,13 +3,15 @@ import '.././CSS/addblog.css'
 import '.././CSS/commonclass.css'
 import { useNavigate, useParams } from "react-router"
 import { useAuth } from "../Auth/Authcontext"
-import { addWikiPage } from "../apicalls"
+import { addWikiPage, linkTags } from "../apicalls"
 
 function DisplayAddContainer({Title, setTitle, Content, setContent}){
     const navigate = useNavigate()
     const param = useParams()
     const wikiid = param.wikiid
     const {user} = useAuth()
+    const [Tags, setTags] = useState([])
+    const [Tag, setTag] = useState("")
 
     return(
         <div>
@@ -19,7 +21,26 @@ function DisplayAddContainer({Title, setTitle, Content, setContent}){
                 <input id="add-title-input" type="text" value={Title} onChange={(e)=>{setTitle(e.target.value)}} autoComplete="off" />
                 <h3>Innehåll</h3>
                 <textarea name="" id="add-description-input" value={Content} onChange={(e)=>{setContent(e.target.value)}} rows={15} cols={100}></textarea>
-                <button id="add-blog-post-button" onClick={()=>{addWikiPage(user.token, wikiid, {"title": Title, "content": Content})}}>Skapa sida</button>
+
+                <form action="" onSubmit={(e)=>{
+                    e.preventDefault()
+                    setTags([...Tags, Tag])
+                    }}>
+                    <h3>Lägg till en tagg</h3>
+                    <input id="add-title-input" type="text" value={Tag} onChange={(e)=>{setTag(e.target.value)}} autoComplete="off" />
+                    <button type="submit">Lägg till tagg</button>
+                </form>
+                {
+                    Tags.map((tag, index)=>(
+                        <div key={index}><p>{tag}</p></div>
+                    ))
+                }
+
+                <button id="add-blog-post-button" onClick={async ()=>{
+                    const returnVal = await addWikiPage(user.token, wikiid, {"title": Title, "content": Content})
+                    linkTags(user.token, {"wikipageID": returnVal.wikipageID, "tags": Tags})
+                    navigate(-1)
+                    }}>Skapa sida</button>
             </div>
         </div>
     )

@@ -29,7 +29,6 @@ function DisplayEditContainer({Wiki, setWiki, Title, setTitle, Description, setD
     <div>
       <button id="back-arrow-button" onClick={()=>{navigate(-1)}}>←</button>
       <div id="edit-post-input-container" className="align-center flex-column">
-        <button onClick={()=>{navigate("../addpost/"+Wiki.id)}}>Gör en sida</button>
         <input id="edit-post-title-input" type="text" value={Title} onChange={(e) => {setTitle(e.target.value)}} autoComplete="off"/>
         <textarea name="" value={Description} id="edit-post-content-input" onChange={(e)=>{setDescription(e.target.value)}} rows={15} cols={100}></textarea>
         {/* <input type="checkbox" defaultChecked={IsPublic}/> */}

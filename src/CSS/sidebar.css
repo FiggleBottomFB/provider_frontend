@@ -1,0 +1,32 @@
+#sidebar-full-container{
+    position: absolute;
+    height: 100%;
+    justify-self: end;
+    max-width: 20%;
+    min-width: 20%;
+    border: 1px #666 solid;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+
+#sidebar-show{
+    position: absolute;
+    justify-self: end;
+    border: none;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+
+#show-sidebar-button{
+    height: 3rem;
+    width: 3rem;
+    border-radius: 50%;
+    border: none;
+}
+#show-sidebar-button:hover{
+    cursor: pointer;
+    transition: 0.1s;
+    transform: scale(1.02);
+}
