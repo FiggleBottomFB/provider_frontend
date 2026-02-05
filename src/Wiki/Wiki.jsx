@@ -12,6 +12,8 @@ function DisplayWikiPages({Pages, setPages, Wiki, setWiki}){
     let params = useParams();
     const wikiid = params.wikiid
     const {user} = useAuth()
+    const [OffsetCount, setOffsetCount] = useState(1)
+
 
     useEffect(() => {
         const fetchBlog = async () => {
@@ -24,8 +26,9 @@ function DisplayWikiPages({Pages, setPages, Wiki, setWiki}){
 
     useEffect(() => {
         const fetchPosts = async () => {
-            const latestWikiPages = await getWikiPages(user.token, wikiid)
+            const latestWikiPages = await getWikiPages(user.token, wikiid, "&limit=4")
             setPages(latestWikiPages.pages)
+            setOffsetCount(OffsetCount + 1)
         }
         fetchPosts()
     }, [])
@@ -33,7 +36,7 @@ function DisplayWikiPages({Pages, setPages, Wiki, setWiki}){
     if(Pages.length == 0){
         return(
             <div>
-                <button id="back-arrow-button" onClick={()=>{navigate("/wiki")}}>←</button>
+                {/* <button id="back-arrow-button" onClick={()=>{navigate("/wiki")}}>←</button> */}
                 <button id="add-page-button" onClick={()=>{navigate("../addpage/"+Wiki.id)}}>Gör en sida</button>
                 <p>Inga sidor hittades i denna wiki</p>
             </div>
@@ -43,7 +46,7 @@ function DisplayWikiPages({Pages, setPages, Wiki, setWiki}){
     return(
         <div id="wiki-full-container">
             <div id="latest-pages-container">
-                <button id="back-arrow-button" onClick={()=>{navigate("/wiki")}}>←</button>
+                {/* <button id="back-arrow-button" onClick={()=>{navigate("/wiki")}}>←</button> */}
                 <button id="add-page-button" onClick={()=>{navigate("../addpage/"+Wiki.id)}}>Gör en sida</button>
                 <h1 id="current-wiki-title">{Wiki.title}</h1>
                 {
@@ -67,6 +70,12 @@ function DisplayWikiPages({Pages, setPages, Wiki, setWiki}){
                     ))
                 }
             </div>
+            <button onClick={async ()=>{
+                setOffsetCount(OffsetCount + 1)
+                const latestWikiPages = await getWikiPages(user.token, wikiid, "&limit="+(4*OffsetCount))
+                setPages(latestWikiPages.pages)
+                console.log(latestWikiPages)
+            }}>Hämta fler sidor</button>
         </div>
     )
 }
@@ -90,7 +99,7 @@ function SearchTags(){
 
     return(
         <div>
-            <input placeholder="Sök efter taggar" type="text" onChange={async (e)=>{
+            <input id="search-tags-input" placeholder="Sök efter taggar" type="text" onChange={async (e)=>{
                 setSearchQuery(e.target.value)
                 let dat4 = await getWikiPages(user.token, CurrentWikiFetch.data.fields.id, `&tag=${encodeURIComponent(e.target.value)}`)
                 console.log(dat4.pages)
@@ -115,10 +124,12 @@ function SearchTags(){
 function Wiki(){
     const [Pages, setPages] = useState([])
     const [Wiki, setWiki] = useState([])
+    const navigate = useNavigate()
 
     return(
         <div id="show-wiki-peages-container">
             <Sidebar><SearchTags/></Sidebar>
+            <button id="back-arrow-button" onClick={()=>{navigate("/wiki")}}>←</button>
             <DisplayWikiPages Pages={Pages} setPages={setPages} Wiki={Wiki} setWiki={setWiki}/>
         </div>
     )

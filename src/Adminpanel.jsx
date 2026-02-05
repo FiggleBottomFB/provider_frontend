@@ -10,7 +10,7 @@ import LoadingAndErrorHandler from "./LoadingAndErrorhandler"
 
 
 function Displayadduser(){
-    const {user} = useAuth
+    const {user} = useAuth()
     const [UserName, setUserName] = useState("")
     const [Password, setPassword] = useState("")
     const [Name, setName] = useState("")

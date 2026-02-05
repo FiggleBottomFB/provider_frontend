@@ -56,10 +56,8 @@ function AddBlog(){
     const [Description, setDescription] = useState("")
     const navigate = useNavigate()
     return(
-       <div>
         <div id="add-blog-base">
             <button id="back-arrow-button" onClick={()=>{navigate(-1)}}>←</button>
-        </div>
 
             <DisplayAddContainer Title={Title} setTitle={setTitle} Description={Description} setDescription={setDescription}/>
         </div>

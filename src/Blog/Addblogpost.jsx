@@ -51,7 +51,7 @@ function AddBlogPost(){
     const [Title, setTitle] = useState("")
     const [Content, setContent] = useState("")
     return(
-        <div>
+        <div id="add-blog-post-base">
             <button onClick={()=>{navigate(-1)}}>←</button>
             <DisplayAddContainer Title={Title} setTitle={setTitle} Content={Content} setContent={setContent}/>
         </div>

@@ -13,32 +13,33 @@ function DisplayBlogPosts({}){
     let params = useParams();
     const blogid = params.blogid
     const {user} = useAuth();
+    const navigate = useNavigate()
 
 
-/*BLOG*/
+    /*BLOG*/
 
-const fetchBlog = async ({ signal }) => {
-    return await getBlog(user.token, blogid, signal);
-  };
-  
-  const blogRequest = useApi(fetchBlog, [user, blogid], !!user);
-  
-/*POST*/
-
-const fetchPosts = async ({ signal }) => {
-    return await getBlogPosts(user.token, blogid,"", signal);
+    const fetchBlog = async ({ signal }) => {
+        return await getBlog(user.token, blogid, signal);
     };
     
-    const postRequest = useApi(fetchPosts, [user, blogid], !!user);
-    //postRequest.data.post
+    const blogRequest = useApi(fetchBlog, [user, blogid], !!user);
+    
+    /*POST*/
+
+    const fetchPosts = async ({ signal }) => {
+        return await getBlogPosts(user.token, blogid,"", signal);
+    };
+        
+        const postRequest = useApi(fetchPosts, [user, blogid], !!user);
+        //postRequest.data.post
 
 
-if (blogRequest.loading || blogRequest.error) return <LoadingAndErrorHandler Loading={blogRequest.loading} Error={blogRequest.error} />
+    if (blogRequest.loading || blogRequest.error) return <LoadingAndErrorHandler Loading={blogRequest.loading} Error={blogRequest.error} />
 
     return(
         <div id="blog-full-container">
             <div id="latest-posts-container">
-                <button id="back-arrow-button" onClick={()=>{navigate("/blog")}}>←</button>
+                {/* <button id="back-arrow-button" onClick={()=>{navigate("/blog")}}>←</button> */}
                 <AddBlogPostButton blogid={blogRequest?.data.fields.id}/>
                 <BlogTitle title={blogRequest?.data.fields.title}/>
                 <BlogPostsContainer postRequest={postRequest}/>
@@ -144,9 +145,9 @@ function Blog(){
     // const [Blog, setBlog] = useState([])
 
     return(
-        <div>
-            <button id="back-arrow-button" onClick={()=>{navigate("/blog")}}>←</button>
+        <div id="blog-base">
             <Sidebar><SearchTags/></Sidebar>
+            <button id="back-arrow-button" onClick={()=>{navigate("/blog")}}>←</button>
             <DisplayBlogPosts />
         </div>
     )
