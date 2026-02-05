@@ -1,10 +1,11 @@
 #latest-blogs-container{
     width: 60vw;
+    margin-top: 20vh;
 }
 
 #blog-display-container{
     height: 10rem;
-    background-color: aqua;
+    border: 0.1rem black solid;
     margin-left: 1rem;
     border-radius: 25px;
     padding-top: 0.1rem;
@@ -13,10 +14,40 @@
     margin-top: 0.5rem;
     object-fit: contain; 
     width: 80%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+#blog-display-container::-webkit-scrollbar{
+    width: 8px;
+    margin: 100px;
+}
+#blog-display-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 6px;
+}
+#blog-display-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 6px;
 }
 
 #blog-display-container:hover{
     transition: all 0.2s;
     transform: scale(1.02);
     cursor: pointer;
+}
+
+.handle-blog-button:hover{
+    cursor: pointer;
+    background-color: #dadada;
+}
+.handle-blog-button{
+    width: 15vw;
+    height: 30%;
+    border-radius: 0.5rem;
+    border: 0rem;
+}
+
+#blog-buttons-container{
+    padding: 1rem;
 }

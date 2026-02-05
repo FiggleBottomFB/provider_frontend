@@ -35,13 +35,13 @@ function DisplayBlogPost({}){
   const handleAddComment = async (token, body, content) => {
     await addBlogComment(token, body, content)
   
-    setRefreshBlog(1)
+    setRefreshBlog(RefreshBlog + 1)
   }
   
   const handleDeleteComment = async (token, commentId) => {
     await deleteBlogComment(token, commentId)
   
-    setRefreshBlog(1)
+    setRefreshBlog(RefreshBlog + 1)
   }
 
   if (blogPostRequest.loading ) return <p>Loading...</p>;
@@ -53,7 +53,7 @@ function DisplayBlogPost({}){
       <button id="back-arrow-button" onClick={()=>{navigate(-1)}}>←</button>
       <div id="blog-post-info-container">
       <BlogPostFrame title={blogPostRequest.data.fields.title} content={blogPostRequest.data.fields.content}/>
-      {/* <DisplayComments Comments={blogPostRequest?.data.fields.comments} addComment={handleAddComment} addToId={BlogPost.id} deleteComment={handleDeleteComment}/> */}
+      <DisplayComments Comments={blogPostRequest?.data.fields.comments} addComment={handleAddComment} addToId={blogPostRequest.data.fields.id} deleteComment={handleDeleteComment} addToString={"blogpostID"}/>
       </div>
     </div>
   )

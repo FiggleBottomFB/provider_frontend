@@ -3,7 +3,7 @@ import '.././CSS/addblog.css'
 import '.././CSS/commonclass.css'
 import { useNavigate, useParams } from "react-router"
 import { useAuth } from "../Auth/Authcontext"
-import { addBlogPost } from "../apicalls"
+import { addBlogPost, linkTags } from "../apicalls"
 
 function DisplayAddContainer({Title, setTitle, Content, setContent}){
     const navigate = useNavigate()
@@ -14,7 +14,7 @@ function DisplayAddContainer({Title, setTitle, Content, setContent}){
     const [Tags, setTags] = useState([])
     const [Tag, setTag] = useState("")
     return(
-        <div>
+        <div id="add-blogpost-full-container">
             <button onClick={()=>{navigate(-1)}}>←</button>
             <div id="add-blog-input-container" className="flex-column align-center">
                 <h3>Titel</h3>
@@ -22,7 +22,7 @@ function DisplayAddContainer({Title, setTitle, Content, setContent}){
                 <h3>Innehåll</h3>
                 <textarea name="" id="add-description-input" value={Content} onChange={(e)=>{setContent(e.target.value)}} rows={15} cols={100}></textarea>
 
-                {/* <form action="" onSubmit={(e)=>{
+                <form action="" onSubmit={(e)=>{
                     e.preventDefault()
                     setTags([...Tags, Tag])
                     }}>
@@ -34,9 +34,13 @@ function DisplayAddContainer({Title, setTitle, Content, setContent}){
                     Tags.map((tag, index)=>(
                         <div key={index}><p>{tag}</p></div>
                     ))
-                } */}
+                }
 
-                <button id="add-blog-post-button" onClick={()=>{addBlogPost(user.token, blogid, {"title": Title, "content": Content, "tags": Tags})}}>Skapa inlägg</button>
+                <button id="add-blog-post-button" onClick={async ()=>{
+                    const returnVal = await addBlogPost(user.token, blogid, {"title": Title, "content": Content})
+                    linkTags(user.token, {"blogpostID": returnVal.blogpostID, "tags": Tags})
+                    navigate(-1)
+                    }}>Skapa inlägg</button>
             </div>
         </div>
     )

@@ -79,7 +79,7 @@ function App() {
               <Route path="edit/:wikiid" element={<EditWiki/>}/>
               <Route path="edit/page/:wikipageid" element={<EditWikiPage/>}/>
               <Route path="add" element={<AddWiki/>}/>
-              <Route path="addpost/:wikiid" element={<AddWikiPage/>}/>
+              <Route path="addpage/:wikiid" element={<AddWikiPage/>}/>
             </Route>
 
 
