@@ -7,6 +7,7 @@ import '.././CSS/commonclass.css'
 import DisplayComments from "../Comments";
 import { useAuth } from "../Auth/Authcontext";
 import { useApi } from "../hooks/useApi";
+import LoadingAndErrorHandler from "../LoadingAndErrorhandler";
 
 
 function DisplayBlogPost({}){
@@ -44,8 +45,8 @@ function DisplayBlogPost({}){
     setRefreshBlog(RefreshBlog + 1)
   }
 
-  if (blogPostRequest.loading ) return <p>Loading...</p>;
-  if (blogPostRequest.error) return <p>Error loading blog: {blogPostRequest.error}</p>;
+
+  if (blogPostRequest.loading || blogPostRequest.error) return <LoadingAndErrorHandler Loading={blogPostRequest.loading} Error={blogPostRequest.error} />
   
 
   return(

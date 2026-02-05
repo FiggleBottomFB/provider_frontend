@@ -5,6 +5,7 @@ import '.././CSS/blogmeny.css'
 import '.././CSS/commonclass.css'
 import { useAuth } from '../Auth/Authcontext';
 import { useApi } from '../hooks/useApi';
+import LoadingAndErrorHandler from '../LoadingAndErrorhandler';
 
 
 //ADMIN ONLY MOVE AWAY FROMHERE
@@ -69,9 +70,8 @@ function Blogmeny(){
     
     const blogRequest = useApi(fetchBlogs, [user], !!user?.token);
 
-    if (blogRequest.loading ) return <p>Loading...</p>;
-    if (blogRequest.error) return <p>Error loading blog: {blogRequest.error}</p>;
-   
+
+   if (blogRequest.loading || blogRequest.error) return <LoadingAndErrorHandler Loading={blogRequest.loading} Error={blogRequest.error} />
 
     return (
         <div>

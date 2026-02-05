@@ -6,6 +6,7 @@ import '../CSS/commonclass.css'
 import { useAuth } from '../Auth/Authcontext'
 import { useApi } from "../hooks/useApi";
 import Sidebar from "../Sidebar";
+import LoadingAndErrorHandler from "../LoadingAndErrorhandler";
 
 function DisplayBlogPosts({}){
     const navigate = useNavigate()
@@ -32,9 +33,7 @@ const fetchPosts = async ({ signal }) => {
     //postRequest.data.post
 
 
-
-if (blogRequest.loading ) return <p>Loading...</p>;
-if (blogRequest.error) return <p>Error loading blog: {blogRequest.error}</p>;
+if (blogRequest.loading || blogRequest.error) return <LoadingAndErrorHandler Loading={blogRequest.loading} Error={blogRequest.error} />
 
     return(
         <div id="blog-full-container">
@@ -71,8 +70,8 @@ function BlogPostsContainer({postRequest}){
     const navigate = useNavigate()
 
 
-  if (postRequest.loading ) return <p>Loading...</p>;
-  if (postRequest.error) return <p>Error loading posts: {postRequest.error}</p>;
+
+  if (postRequest.loading || postRequest.error) return <LoadingAndErrorHandler Loading={postRequest.loading} Error={postRequest.error} />
 
   return (
     postRequest.data.posts.map((post, index)=>(

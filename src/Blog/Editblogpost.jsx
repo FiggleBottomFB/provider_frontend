@@ -5,6 +5,7 @@ import '../CSS/commonclass.css'
 import '../CSS/editblog.css'
 import { useApi } from "../hooks/useApi";
 import { useAuth } from "../Auth/Authcontext";
+import LoadingAndErrorHandler from "../LoadingAndErrorhandler";
 
 
 function DisplayEditContainer({}){
@@ -43,8 +44,7 @@ function DisplayEditContainer({}){
       navigate(-1);
     };
 
-    if (error) return <p>Error loading blog: {error}</p>;
-    if (loading) return <p>Loading... </p>;
+    if (loading || error) return <LoadingAndErrorHandler Loading={loading} Error={error} />
     
 
   return(

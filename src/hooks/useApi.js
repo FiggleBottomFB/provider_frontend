@@ -19,7 +19,6 @@ export function useApi(apiFunction, deps = [],enabled=true) {
         const result = await apiFunction({
           signal: controller.signal,
         });
-        // console.log(result)
 
 
 
