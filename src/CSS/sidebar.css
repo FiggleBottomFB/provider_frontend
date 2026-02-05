@@ -1,22 +1,27 @@
 #sidebar-full-container{
-    position: absolute;
-    height: 100%;
+    position: fixed;
+    height: 85vw;
     justify-self: end;
     max-width: 20%;
     min-width: 20%;
-    border: 1px #666 solid;
+    border-left: 1px #666 solid;
+    border-bottom: 1px #666 solid;
     display: flex;
     justify-content: center;
-    overflow: hidden;
+    overflow: visible;
+    /* clip-path: inset(0 0 0 -100vw); */
+    background-color: #dcdcdc;
 }
 
+
 #sidebar-show{
-    position: absolute;
+    position: fixed;
     justify-self: end;
     border: none;
     display: flex;
     justify-content: center;
-    overflow: hidden;
+    /* overflow-x: hidden; */
+    padding-right: 1rem;
 }
 
 #show-sidebar-button{
@@ -24,6 +29,9 @@
     width: 3rem;
     border-radius: 50%;
     border: none;
+    position: absolute;
+    margin-right: 100%;
+    margin-top: 20%;
 }
 #show-sidebar-button:hover{
     cursor: pointer;

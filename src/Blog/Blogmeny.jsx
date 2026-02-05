@@ -12,9 +12,10 @@ import Spinner from '../spinnertest';
 //ADMIN ONLY MOVE AWAY FROMHERE
 function DisplayBlogButton(){
     const navigate = useNavigate()
+    const {user} = useAuth()
     useEffect(()=>{
         const fetchBlogs = async () =>{
-            const verifyAlreadyHaveBlog = await getAllBlogs(window.sessionStorage("token"))
+            const verifyAlreadyHaveBlog = await getAllBlogs(user.token)
             const { user } = useAuth()
             verifyAlreadyHaveBlog.array.forEach(blog => {
                 if(blog.id == user.id){
@@ -42,13 +43,15 @@ function DisplayBlogs({LatestBlogs}){
     return(
         <div id="latest-blogs-container">
             {LatestBlogs.map((blog, index) =>(
-                <div key={index}>
+                <div key={index} className='flex-row'>
                     <div id="blog-display-container" onClick={()=>{navigate("/blog/"+blog.id)}}>
                         <h1>{blog.title}</h1>
                         <p>{blog.description}</p>
                     </div>
-                    <button onClick={()=>{navigate("edit/"+blog.id)}}>Redigera</button>
-                    <button onClick={()=>{deleteBlog(user.token, post.id)}}>Ta bort</button>
+                    <div id="blog-buttons-container" className="flex-column justify-around">
+                        <button className="handle-blog-button" onClick={()=>{navigate("edit/"+blog.id)}}>Redigera</button>
+                        <button className="handle-blog-button" onClick={()=>{deleteBlog(user.token, post.id)}}>Ta bort</button>
+                    </div>
                 </div>
             ))}
         </div>

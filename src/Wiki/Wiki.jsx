@@ -34,7 +34,7 @@ function DisplayWikiPages({Pages, setPages, Wiki, setWiki}){
         return(
             <div>
                 <button id="back-arrow-button" onClick={()=>{navigate("/wiki")}}>←</button>
-                <button id="add-page-button" onClick={()=>{navigate("../addpost/"+Wiki.id)}}>Gör en sida</button>
+                <button id="add-page-button" onClick={()=>{navigate("../addpage/"+Wiki.id)}}>Gör en sida</button>
                 <p>Inga sidor hittades i denna wiki</p>
             </div>
         )
@@ -44,11 +44,11 @@ function DisplayWikiPages({Pages, setPages, Wiki, setWiki}){
         <div id="wiki-full-container">
             <div id="latest-pages-container">
                 <button id="back-arrow-button" onClick={()=>{navigate("/wiki")}}>←</button>
-                <button id="add-page-button" onClick={()=>{navigate("../addpost/"+Wiki.id)}}>Gör en sida</button>
+                <button id="add-page-button" onClick={()=>{navigate("../addpage/"+Wiki.id)}}>Gör en sida</button>
                 <h1 id="current-wiki-title">{Wiki.title}</h1>
                 {
                     Pages.map((page, index)=>(
-                        <div key={index}>
+                        <div key={index} className="flex-row">
                             <div id="page-display-container" onClick={()=>{navigate("/wiki/page/"+page.id)}}>
                                 <h1>{page.title}</h1>
                                 {
@@ -59,8 +59,10 @@ function DisplayWikiPages({Pages, setPages, Wiki, setWiki}){
                                     ))
                                 }
                             </div>
-                            <button onClick={()=>{navigate(".././edit/page/"+page.id)}}>Redigera</button>
-                            <button onClick={()=>{deleteWikiPage(user.token, page.id)}}>Ta bort</button>
+                            <div id="wiki-menu-buttons-container" className='flex-column justify-around'>
+                                <button className="wiki-choice-button" onClick={()=>{navigate(".././edit/page/"+page.id)}}>Redigera</button>
+                                <button className="wiki-choice-button" onClick={()=>{deleteWikiPage(user.token, page.id)}}>Ta bort</button>
+                            </div>
                         </div>
                     ))
                 }
@@ -115,7 +117,7 @@ function Wiki(){
     const [Wiki, setWiki] = useState([])
 
     return(
-        <div>
+        <div id="show-wiki-peages-container">
             <Sidebar><SearchTags/></Sidebar>
             <DisplayWikiPages Pages={Pages} setPages={setPages} Wiki={Wiki} setWiki={setWiki}/>
         </div>
