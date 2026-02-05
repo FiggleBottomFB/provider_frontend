@@ -4,7 +4,7 @@
 
 
 #input-container{
-    width: 80vw;
+    width: 100vw;
 }
 
 #back-arrow-button{
@@ -34,4 +34,8 @@
 
 #choose-person-button:hover{
     cursor: pointer;
+}
+
+#add-wiki-base{
+    margin-top: 15vh;
 }

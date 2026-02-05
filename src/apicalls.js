@@ -22,7 +22,7 @@ async function apiFetch(path, options = {}) {
 
 
   // console.log(JSON.stringify(body))
-  console.log(path)
+  // console.log(path)
 
   const res = await fetch(API_BASE + path, {
     method,
