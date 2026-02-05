@@ -55,14 +55,14 @@ function DisplayEditUser(){
     const [UserId, setUserId] = useState(0)
 
     const fetchAllPeople = async ({ signal }) => {
-        return await getAllPeople(user.token,"",signal)
+        return await getAllPeople(user.token,"?isblocked",signal)
     }
     
     const allPeopleRequest = useApi(fetchAllPeople, [user], !!user?.token);
 
 
     if (allPeopleRequest.loading || allPeopleRequest.error) return <LoadingAndErrorHandler Loading={allPeopleRequest.loading} Error={allPeopleRequest.error} />
-
+    console.log(allPeopleRequest.data.people)
     return(
         <div id="select-user-container" className="align-center flex-column">
             <h3>Redigera användare</h3>
@@ -74,12 +74,12 @@ function DisplayEditUser(){
                     </div>
                 ))
             }
-            <DisplayEditUserFields UserId={UserId}/>
+            <DisplayEditUserFields UserId={UserId} allPeopleRequest={allPeopleRequest}/>
         </div>
     )
 }
 
-function DisplayEditUserFields({UserId}){
+function DisplayEditUserFields({UserId, allPeopleRequest}){
     if(UserId == 0){
         return
     }
@@ -92,7 +92,6 @@ function DisplayEditUserFields({UserId}){
     const [EmployeeNumber, setEmployeeNumber] = useState("")
     const [IsAdmin, setIsAdmin] = useState(Boolean)
     const [IsBlocked, setIsBlocked] = useState("")
-    const [EditMessage, setEditMessage] = useState("")
 
     const fetchUser = async ({signal}) => {
         return await getPerson(user.token, UserId,"", signal)
@@ -100,6 +99,7 @@ function DisplayEditUserFields({UserId}){
     const editUserInfo = useApi(fetchUser, [user, UserId], !!user?.token)
 
     useEffect(()=>{
+        console.log("updated values")
         if(editUserInfo.data){
             setUserName(editUserInfo.data.fields.username)
             setName(editUserInfo.data.fields.name)
@@ -115,12 +115,6 @@ function DisplayEditUserFields({UserId}){
     }, [editUserInfo.data])
 
     if (editUserInfo.loading || editUserInfo.error) return <LoadingAndErrorHandler Loading={editUserInfo.loading} Error={editUserInfo.error} />
-
-    if(EditMessage != ""){
-        return(
-            <p>{EditMessage}</p>
-        )
-    }
 
     return(
         <div className="flex-column align-center">
@@ -142,9 +136,9 @@ function DisplayEditUserFields({UserId}){
             <input type="text" name="isblockedreason" id="" value={IsBlocked} autoComplete="off" onChange={(e)=>{setIsBlocked(e.target.value)}}/>
 
             <button className="button-style" onClick={()=>{
-                editPerson(user.token, UserId, {"username": UserName, "passwordhash": sha256(Password), "name": Name, "email": Mail, "phonenumber": TelNumber, "employeenumber": EmployeeNumber, "admin": IsAdmin})
-                setEditMessage("Användare redigerad")
-                editUserInfo.refresh();
+                editPerson(user.token, UserId, {"username": UserName, "passwordhash": sha256(Password), "name": Name, "email": Mail, "phonenumber": TelNumber, "employeenumber": EmployeeNumber, "admin": IsAdmin, "blocked": IsBlocked == "" ? null : IsBlocked})
+                allPeopleRequest.refetch()
+                UserId = 0
                 }}>Spara ändringar</button>
         </div>
     )

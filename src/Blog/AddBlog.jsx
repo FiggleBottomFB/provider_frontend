@@ -47,16 +47,6 @@ function DisplayAddContainer({Title, setTitle, Description, setDescription}){
                         ))
                     }
                 </div>
-
-//         <div>
-            
-//             <div id="add-blog-input-container" className="flex-column align-center">
-//                 <h3>Titel</h3>
-//                 <input id="add-title-input" type="text" value={Title} onChange={(e)=>{setTitle(e.target.value)}} autoComplete="off" />
-//                 <h3>Beskrivning</h3>
-//                 <textarea name="" id="add-description-input" value={Description} onChange={(e)=>{setDescription(e.target.value)}} rows={15} cols={100} ></textarea>
-//                 <button id="add-blog-post-button" onClick={()=>{addBlog(user.token, user.id, {"title": Title, "description": Description})}}>Skapa blogg</button>
-
             </div>
         </div>
     )

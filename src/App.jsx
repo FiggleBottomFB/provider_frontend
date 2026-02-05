@@ -62,6 +62,11 @@ function App() {
           <Route path='/' element={<HomeHeader/>}>
             <Route index element={<Home />} />
 
+            {/* <Route path='public' element={<Home/>}>
+              <Route path=':blogid' element={<DisplayPublicBlog/>}/>
+              <Route path='blog/:blogpostid' element={<DisplayPublicBlogPost/>}/>
+            </Route> */}
+
             <Route path='Blog' element={<RequireAuth roles={["user","admin"]}><BlogContainer/></RequireAuth>}>
               <Route index element={<Blogmeny />} />
               <Route path=':blogid' element={<Blog />}></Route>
