@@ -62,7 +62,7 @@ function App() {
           <Route path='/' element={<HomeHeader/>}>
             <Route index element={<Home />} />
 
-            <Route path='Blog' element={<BlogContainer/>}>
+            <Route path='Blog' element={<RequireAuth roles={["user","admin"]}><BlogContainer/></RequireAuth>}>
               <Route index element={<Blogmeny />} />
               <Route path=':blogid' element={<Blog />}></Route>
               <Route path="blog/:blogpostid" element={<BlogPost/>} />
@@ -104,6 +104,7 @@ function App() {
     
   )
 }
+
 function Unauthorized(){
   return <h2>UNAUTHORIZED</h2>
 }

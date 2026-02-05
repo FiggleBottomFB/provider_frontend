@@ -6,7 +6,6 @@ import { addBlog, getAllPeople } from "../apicalls"
 import { useAuth } from "../Auth/Authcontext"
 
 function DisplayAddContainer({Title, setTitle, Description, setDescription}){
-    const navigate = useNavigate()
     const {user} = useAuth()
     const [AllPeople, setAllPeople] = useState([])
     const [PersonId, setPersonId] = useState(0)
@@ -24,6 +23,7 @@ function DisplayAddContainer({Title, setTitle, Description, setDescription}){
     
 
     return(
+
         <div id="add-blog-full-container" className="justify-center">
             <div className="flex-row">
                 <div id="add-blog-input-container" className="flex-column align-center">
@@ -47,6 +47,16 @@ function DisplayAddContainer({Title, setTitle, Description, setDescription}){
                         ))
                     }
                 </div>
+
+//         <div>
+            
+//             <div id="add-blog-input-container" className="flex-column align-center">
+//                 <h3>Titel</h3>
+//                 <input id="add-title-input" type="text" value={Title} onChange={(e)=>{setTitle(e.target.value)}} autoComplete="off" />
+//                 <h3>Beskrivning</h3>
+//                 <textarea name="" id="add-description-input" value={Description} onChange={(e)=>{setDescription(e.target.value)}} rows={15} cols={100} ></textarea>
+//                 <button id="add-blog-post-button" onClick={()=>{addBlog(user.token, user.id, {"title": Title, "description": Description})}}>Skapa blogg</button>
+
             </div>
         </div>
     )
@@ -57,8 +67,11 @@ function AddBlog(){
     const [Description, setDescription] = useState("")
     const navigate = useNavigate()
     return(
+       <div>
         <div id="add-blog-base">
             <button id="back-arrow-button" onClick={()=>{navigate(-1)}}>←</button>
+        </div>
+
             <DisplayAddContainer Title={Title} setTitle={setTitle} Description={Description} setDescription={setDescription}/>
         </div>
     )
