@@ -3,10 +3,13 @@ import './CSS/comments.css'
 import './CSS/commonclass.css'
 import { getAllPeople } from "./apicalls"
 import { useAuth } from "./Auth/Authcontext"
+import Spinner from "./spinnertest"
 
-function DisplayComments({Comments, addComment, addToId, deleteComment, addToString = ""}){
+function DisplayComments({Comments, addComment, addToId, deleteComment, addToString = "" ,isFetching=false}){
     const [Comment, setComment] = useState("")
     const {user} = useAuth()
+
+
 
     return(
         <div id="comments-container">
@@ -21,6 +24,7 @@ function DisplayComments({Comments, addComment, addToId, deleteComment, addToStr
                         addComment(user.token, {"blogpostID": addToId}, {"content": Comment})
                     }
                 }}>Lägg till kommentar</button>
+                {isFetching && <Spinner size={12} />}
             </div>
             {
                 Comments.map(comment=>(

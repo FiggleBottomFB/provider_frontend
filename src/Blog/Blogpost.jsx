@@ -53,7 +53,7 @@ function DisplayBlogPost({}){
       <button id="back-arrow-button" onClick={()=>{navigate(-1)}}>←</button>
       <div id="blog-post-info-container">
       <BlogPostFrame title={blogPostRequest.data.fields.title} content={blogPostRequest.data.fields.content}/>
-      <DisplayComments Comments={blogPostRequest?.data.fields.comments} addComment={handleAddComment} addToId={blogPostRequest.data.fields.id} deleteComment={handleDeleteComment} addToString={"blogpostID"}/>
+      <DisplayComments isFetching={blogPostRequest.isFetching} Comments={blogPostRequest?.data.fields.comments} addComment={handleAddComment} addToId={blogPostRequest.data.fields.id} deleteComment={handleDeleteComment} addToString={"blogpostID"}/>
       </div>
     </div>
   )
