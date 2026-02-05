@@ -9,7 +9,7 @@ import Sidebar from "../Sidebar";
 import LoadingAndErrorHandler from "../LoadingAndErrorhandler";
 
 function DisplayBlogPosts({}){
-    const navigate = useNavigate()
+
     let params = useParams();
     const blogid = params.blogid
     const {user} = useAuth();
@@ -139,9 +139,13 @@ function SearchTags(){
 
 
 function Blog(){
+    const navigate = useNavigate()
+    // const [Posts, setPosts] = useState([])
+    // const [Blog, setBlog] = useState([])
 
     return(
         <div>
+            <button id="back-arrow-button" onClick={()=>{navigate("/blog")}}>←</button>
             <Sidebar><SearchTags/></Sidebar>
             <DisplayBlogPosts />
         </div>
