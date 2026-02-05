@@ -11,7 +11,6 @@ import LoadingAndErrorHandler from "../LoadingAndErrorhandler";
 
 
 function DisplayBlogPost({}){
-  const [RefreshBlog, setRefreshBlog] = useState(1)
   const navigate = useNavigate()
   let params = useParams();
   const postid = params.blogpostid
@@ -29,20 +28,20 @@ function DisplayBlogPost({}){
   const fetchBlog = async ({ signal }) => {
         return await getBlogPost(user?.token, postid, signal)
     }  
-  const blogPostRequest = useApi(fetchBlog, [user?.token,RefreshBlog], !!user?.token);
+  const blogPostRequest = useApi(fetchBlog, [user?.token], !!user?.token);
 
 
 
   const handleAddComment = async (token, body, content) => {
     await addBlogComment(token, body, content)
   
-    setRefreshBlog(1) //test for refreshing a get (blogPostRequest)
+    blogPostRequest.refetch()
   }
   
   const handleDeleteComment = async (token, commentId) => {
     await deleteBlogComment(token, commentId)
   
-    setRefreshBlog(1)
+    blogPostRequest.refetch()
   }
 
 

@@ -1,57 +1,70 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 //IMPORTANT it creates a useEffect so dont have it in a useEFFECT
-export function useApi(apiFunction, deps = [],enabled=true) {
+export function useApi(apiFunction, deps = [], enabled = true) {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+  const [loading, setIsInitialLoading] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
+
+  const hasFetchedOnce = useRef(false);
+
+  const run = async (signalOverride) => {
     if (!enabled) return;
+
     const controller = new AbortController();
+    const signal = signalOverride || controller.signal;
+
     let active = true;
+    setIsFetching(true);
 
-    async function run() {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const result = await apiFunction({
-          signal: controller.signal,
-        });
-
-
-
-        if (active && !(result?.error)) {
-          setData(result);
-        } 
-        //error
-        else{
-          setError(result.error)
-        }
-
-      } catch (err) {
-        if (err.name === "AbortError") return;
-
-        if (active) {
-          setError(err.message);
-        }
-      } finally {
-        if (active) {
-          setLoading(false);
-        }
-      }
+    if (!hasFetchedOnce.current) {
+      setIsInitialLoading(true);
     }
 
-    run();
+    try {
+      setError(null);
+
+      const result = await apiFunction({ signal });
+
+      // API-specific error handling
+      if (result?.error) {
+        throw new Error(result.error);
+      }
+
+      if (active) {
+        setData(result);
+        hasFetchedOnce.current = true;
+      }
+    } catch (err) {
+      if (err.name !== "AbortError" && active) {
+        setError(err.message);
+      }
+    } finally {
+      if (active) {
+        setIsFetching(false);
+        setIsInitialLoading(false);
+      }
+    }
 
     return () => {
       active = false;
       controller.abort();
     };
+  };
+
+  useEffect(() => {
+    run();
   }, deps);
 
-  return { data, loading, error };
+  return {
+    data,
+    error,
+    loading, // only first load
+    isFetching,       // any request
+    refetch: run      //to run again ex wiki updated refetch
+  };
 }
 
 /* EXEMPEL 

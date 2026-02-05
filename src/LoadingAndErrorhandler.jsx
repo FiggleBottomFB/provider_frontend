@@ -1,3 +1,5 @@
+import Spinner from "./spinnertest"
+
 export function LoadingAndErrorHandler({Loading,Error}){
 
     if (Error){
@@ -12,7 +14,7 @@ export function LoadingAndErrorHandler({Loading,Error}){
 
 function LoadingMessage({}){
     return (
-        <div>laddar..</div>
+        <Spinner size={32} />
     )
 }
 

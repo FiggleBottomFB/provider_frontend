@@ -8,7 +8,7 @@ import { useApi } from "../hooks/useApi";
 import LoadingAndErrorHandler from "../LoadingAndErrorhandler";
 
 function DisplayBlogPosts({}){
-    const navigate = useNavigate()
+
     let params = useParams();
     const blogid = params.blogid
     const {user} = useAuth();
@@ -37,7 +37,7 @@ if (blogRequest.loading || blogRequest.error) return <LoadingAndErrorHandler Loa
     return(
         <div id="blog-full-container">
             <div id="latest-posts-container">
-                <button id="back-arrow-button" onClick={()=>{navigate("/blog")}}>←</button>
+                
                 <BlogTitle title={blogRequest?.data.fields.title}/>
                 <BlogPostsContainer postRequest={postRequest}/>
             </div>
@@ -83,11 +83,13 @@ function BlogPostsContainer({postRequest}){
 
 
 function Blog(){
+    const navigate = useNavigate()
     // const [Posts, setPosts] = useState([])
     // const [Blog, setBlog] = useState([])
 
     return(
         <div>
+            <button id="back-arrow-button" onClick={()=>{navigate("/blog")}}>←</button>
             <DisplayBlogPosts />
         </div>
     )

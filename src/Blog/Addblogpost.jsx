@@ -6,7 +6,7 @@ import { useAuth } from "../Auth/Authcontext"
 import { addBlogPost } from "../apicalls"
 
 function DisplayAddContainer({Title, setTitle, Content, setContent}){
-    const navigate = useNavigate()
+
     const param = useParams()
     const blogid = param.blogid
     const {user} = useAuth()
@@ -15,7 +15,7 @@ function DisplayAddContainer({Title, setTitle, Content, setContent}){
     const [Tag, setTag] = useState("")
     return(
         <div>
-            <button onClick={()=>{navigate(-1)}}>←</button>
+            
             <div id="add-blog-input-container" className="flex-column align-center">
                 <h3>Titel</h3>
                 <input id="add-title-input" type="text" value={Title} onChange={(e)=>{setTitle(e.target.value)}} autoComplete="off" />
@@ -43,10 +43,12 @@ function DisplayAddContainer({Title, setTitle, Content, setContent}){
 }
 
 function AddBlogPost(){
+    const navigate = useNavigate()
     const [Title, setTitle] = useState("")
     const [Content, setContent] = useState("")
     return(
         <div>
+            <button onClick={()=>{navigate(-1)}}>←</button>
             <DisplayAddContainer Title={Title} setTitle={setTitle} Content={Content} setContent={setContent}/>
         </div>
     )
