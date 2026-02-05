@@ -65,7 +65,7 @@ function EditBlogMenu({title, setTitle, description, setDescription, isPublic, s
         onSave();
     }}>
       <input id="edit-post-title-input" type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
-      <textarea id="edit-post-content-input" value={description} onChange={(e) => setDescription(e.target.value)}/>
+      <textarea id="edit-post-content-input" value={description} onChange={(e) => setDescription(e.target.value)} rows={15} cols={100}/>
       <label>
         Public
         <input type="checkbox" checked={isPublic} onChange={(e) => setIsPublic(e.target.checked)}/>
@@ -79,7 +79,7 @@ function EditBlogMenu({title, setTitle, description, setDescription, isPublic, s
 function EditBlog(){
   const navigate = useNavigate()
   return (
-    <div>
+    <div id="edit-blog-full-container">
       <button id="back-arrow-button" onClick={() => navigate(-1)}>←</button>
       <DisplayEditContainer />
     </div>

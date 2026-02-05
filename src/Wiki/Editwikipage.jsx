@@ -38,22 +38,23 @@ function DisplayEditContainer({WikiPage, setWikiPage, Title, setTitle, Content, 
         <form action="" onSubmit={(e)=>{
             e.preventDefault()
             setTags([...Tags, Tag])
+            linkTags(user.token, {"wikipageID": pageid, "tags": [Tag]})
             }}>
             <h3>Lägg till en tagg</h3>
             <input id="add-title-input" type="text" value={Tag} onChange={(e)=>{setTag(e.target.value)}} autoComplete="off" />
             <button type="submit">Lägg till tagg</button>
         </form>
         <div>
-            {
-              Tags.map((tag, index)=>(
-                <div key={index} className="flex-row align-center">
-                  <p>{tag}</p>
-                  <button id="delete-tag-button" onClick={()=>{
-                    unlinkTags(user.token, {"wikipageID": pageid, "tags": [tag]})
-                }}>x</button></div>
-              ))
-            }
-          </div>
+          {
+            Tags.map((tag, index)=>(
+              <div key={index} className="flex-row align-center">
+                <p>{tag}</p>
+                <button id="delete-tag-button" onClick={()=>{
+                  unlinkTags(user.token, {"wikipageID": pageid, "tags": [tag]})
+              }}>x</button></div>
+            ))
+          }
+        </div>
         <button onClick={()=>{
           editWikiPage(user.token, pageid, {"title": Title, "content": Content})
           navigate(-1)
