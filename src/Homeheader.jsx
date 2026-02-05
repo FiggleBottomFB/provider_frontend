@@ -9,7 +9,7 @@ import { useAuth } from './Auth/Authcontext';
 function DisplayAdminPanelButton(){
     const {user} = useAuth()
     console.log(user)
-    if(user.role != "admin"){
+    if(!user || user.role != "admin"){
         return
     }
     return(
