@@ -11,16 +11,15 @@ function DisplayAddContainer({Title, setTitle, Description, setDescription}){
     const [PersonId, setPersonId] = useState(0)
     const [ChosenName, setChosenName] = useState("")
 
-     useEffect(()=>{
-            const fetchAllPeople = async ()=>{
-                console.log(user)
-                const allPeopleTemp = await getAllPeople(user.token)
-                setAllPeople(allPeopleTemp.people)
-                console.log(allPeopleTemp)
-            }
-            fetchAllPeople()
-        }, [])
-    
+    useEffect(()=>{
+        const fetchAllPeople = async ()=>{
+            console.log(user)
+            const allPeopleTemp = await getAllPeople(user.token, true)
+            setAllPeople(allPeopleTemp.people)
+            console.log(allPeopleTemp)
+        }
+        fetchAllPeople()
+    }, [])
 
     return(
 

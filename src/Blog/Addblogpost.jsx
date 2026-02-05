@@ -10,6 +10,7 @@ function DisplayAddContainer({Title, setTitle, Content, setContent}){
     const param = useParams()
     const blogid = param.blogid
     const {user} = useAuth()
+    const navigate = useNavigate()
 
     const [Tags, setTags] = useState([])
     const [Tag, setTag] = useState("")

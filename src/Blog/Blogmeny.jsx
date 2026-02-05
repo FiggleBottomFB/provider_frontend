@@ -50,7 +50,7 @@ function DisplayBlogs({LatestBlogs}){
                     </div>
                     <div id="blog-buttons-container" className="flex-column justify-around">
                         <button className="handle-blog-button" onClick={()=>{navigate("edit/"+blog.id)}}>Redigera</button>
-                        <button className="handle-blog-button" onClick={()=>{deleteBlog(user.token, post.id)}}>Ta bort</button>
+                        <button className="handle-blog-button" onClick={()=>{deleteBlog(user.token, blog.id)}}>Ta bort</button>
                     </div>
                 </div>
             ))}
