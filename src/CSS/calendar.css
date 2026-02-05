@@ -10,6 +10,7 @@
 }
 
 #calendar-container{
+    margin-top: 15vh;
     width: 100vw;
     height: 100%;
 }
