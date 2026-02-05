@@ -20,9 +20,8 @@ function DisplayAddContainer({Title, setTitle, Description, setDescription, allP
     }, [])
 
     return(
-        <div className="flex-row">
-            <div id="input-container">
-                <button id="back-arrow-button" onClick={()=>{navigate(-1)}}>←</button>
+        <div id="add-wiki-full-container" className="flex-row">
+            <div id="input-container" className="flex-row justify-center">
                 <div id="add-wiki-input-container" className="flex-column align-center">
                     <h2>Wikin skapas till {ChosenName}</h2>
                     <h3>Titel</h3>
@@ -34,19 +33,19 @@ function DisplayAddContainer({Title, setTitle, Description, setDescription, allP
                         navigate(-1)
                         }}>Skapa wiki</button>
                 </div>
-            </div>
-            <div id="choose-person-container" className="flex-column">
-                {
-                    allPeople.map((person, index)=>(
-                        <div key={index} id="person-container" className="flex-row align-center justify-around">
-                            <p>{person.username}</p>
-                            <button id="choose-person-button" onClick={()=>{
-                                setPersonId(person.id)
-                                setChosenName(person.username)
-                                }}>Välj</button>
-                        </div>
-                    ))
-                }
+                <div id="choose-person-container" className="flex-column">
+                    {
+                        allPeople.map((person, index)=>(
+                            <div key={index} id="person-container" className="flex-row align-center justify-around">
+                                <p>{person.username}</p>
+                                <button id="choose-person-button" onClick={()=>{
+                                    setPersonId(person.id)
+                                    setChosenName(person.username)
+                                    }}>Välj</button>
+                            </div>
+                        ))
+                    }
+                </div>
             </div>
         </div>
     )
@@ -58,8 +57,10 @@ function AddWiki(){
     const [allPeople, setAllPeople] = useState([])
     const [PersonId, setPersonId] = useState(0)
     const [ChosenName, setChosenName] = useState("")
+    const navigate = useNavigate()
     return(
-        <div>
+        <div id="add-wiki-base">
+            <button id="back-arrow-button" onClick={()=>{navigate(-1)}}>←</button>
             <DisplayAddContainer Title={Title} setTitle={setTitle} Description={Description} setDescription={setDescription} allPeople={allPeople} setAllPeople={setAllPeople} PersonId={PersonId} setPersonId={setPersonId} ChosenName={ChosenName} setChosenName={setChosenName}/>
         </div>
     )
