@@ -11,7 +11,7 @@ function Sidebar({children}){
     if(!IsHidden){
         return(
             <div id="sidebar-full-container">
-                <button id="show-sidebar-button" onClick={()=>{setIsHidden(!IsHidden)}}>Visa</button>
+                <button id="show-sidebar-button" onClick={()=>{setIsHidden(!IsHidden)}}>Göm</button>
                 {children}
             </div>
         )
