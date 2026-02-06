@@ -60,7 +60,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<HomeHeader/>}>
-            <Route index element={<Home />} />
+            <Route index element={  <RequireAuth roles={["user","admin","guest"]}><Home /></RequireAuth>} />
 
             {/* <Route path='public' element={<Home/>}>
               <Route path=':blogid' element={<DisplayPublicBlog/>}/>

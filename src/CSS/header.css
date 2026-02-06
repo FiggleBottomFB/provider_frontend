@@ -73,6 +73,7 @@
   
     white-space: nowrap; /* prevent wrapping */
     box-sizing: border-box;
+    cursor: pointer;
   }
 
 /* on hold */
