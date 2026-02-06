@@ -80,11 +80,12 @@ export function AuthProvider({ children }) {
 
   // Logout function  user   avilable in authcontext just use  useAuth
   async function logout() {
+    setUser(null); //set user to null
     if(user.token){
       await apiLogout(user.token);
     }
     sessionStorage.removeItem("user");
-    setUser(null); //set user to null
+    
   }
 
   return (

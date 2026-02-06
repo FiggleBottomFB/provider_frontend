@@ -43,7 +43,7 @@ function HomeHeader(){
 
                 <div id="login-container">
                     {/* <NavLink to="/login" className="header-route-link">Logga in</NavLink> */}
-                    {user?.token? <button className="header-route-link" onClick={()=> {logout()}}> logga ut</button> : <NavLink to="/login" className="header-route-link">Logga in</NavLink>}
+                    {user?.token? <button className="header-route-link" onClick={async ()=> { await logout()}}> logga ut</button> : <NavLink to="/login" className="header-route-link">Logga in</NavLink>}
                     {/* <div id="user-info-container" className="flex-row align-center">
 
                     </div> */}
