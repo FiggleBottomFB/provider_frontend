@@ -38,3 +38,8 @@
     transition: 0.2s;
     transform: scale(1.05);
 }
+#back-arrow-button{
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+}
