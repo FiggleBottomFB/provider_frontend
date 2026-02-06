@@ -18,28 +18,37 @@ function DisplayAdminPanelButton(){
 
 function HomeHeader(){
     const navigate = useNavigate()
+    const {user, logout}=useAuth()
     return( 
         <div>
-            <header id="header-container" >
+            <header id="header-container">
 
-                    <div id='logo-container'>
-                        <img onClick={()=>{navigate("/")}} id="header-logo-image" src={viteLogo} alt="LogoImg" />
+                <div id="left-column">
+                    <div id="logo-container">
+                    <img
+                        onClick={() => navigate("/")}
+                        id="header-logo-image"
+                        src={viteLogo}
+                        alt="Logo"
+                    />
                     </div>
-                    
-                    <nav id="header-route-link-container" >
-                        <NavLink to="/wiki" className='header-route-link'>Wiki</NavLink> 
-                        <NavLink to="/blog" className='header-route-link'>Blog</NavLink> 
-                        <NavLink to="/calendar" className='header-route-link'>Kalender</NavLink> 
-                        <DisplayAdminPanelButton/>
+
+                    <nav id="header-route-link-container">
+                    <NavLink to="/wiki" className="header-route-link">Wiki</NavLink>
+                    <NavLink to="/blog" className="header-route-link">Blog</NavLink>
+                    <NavLink to="/calendar" className="header-route-link">Kalender</NavLink>
+                    <DisplayAdminPanelButton />
                     </nav>
+                </div>
 
-                    <div id='login-container'>
-                        <div id="user-info-container" className='flex-row align-center'>
-                            <img id="profile-img" src={reactLogo} alt="LetterImg" />
-                            link to user page 
-                        </div>
-                    </div>
- 
+                <div id="login-container">
+                    {/* <NavLink to="/login" className="header-route-link">Logga in</NavLink> */}
+                    {user?.token? <button className="header-route-link" onClick={()=> {logout()}}> logga ut</button> : <NavLink to="/login" className="header-route-link">Logga in</NavLink>}
+                    {/* <div id="user-info-container" className="flex-row align-center">
+
+                    </div> */}
+                </div>
+
             </header>
 
             
