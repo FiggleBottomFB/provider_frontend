@@ -64,7 +64,7 @@ function EditBlogPostMenu({Title, setTitle, Content, setContent, onSave}) {
         onSave();
     }}>
       <input id="edit-post-title-input" type="text" value={Title} onChange={(e) => {setTitle(e.target.value)}} autoComplete="off"/>
-      <textarea name="" value={Content} id="edit-post-content-input" onChange={(e)=>{setContent(e.target.value)}}></textarea>
+      <textarea name="" value={Content} id="edit-post-content-input" onChange={(e)=>{setContent(e.target.value)}} rows={15} cols={100}></textarea>
       <Handletags/>
       <button type="submit" >Spara ändringar</button>
     </form>
@@ -82,27 +82,27 @@ function Handletags(){
     return await getBlogPost(user.token, postid, signal);
   };
 
-  const { data } = useApi(fetchBlogPost, [user], !!user?.token);
+  const fetchTags = useApi(fetchBlogPost, [user], !!user?.token);
 
   useEffect(() => {
-    if (data) {
-      setTags(data.fields.tags)
+    if (fetchTags.data) {
+      setTags(fetchTags.data.fields.tags)
     }
-  }, [data]);
+  }, [fetchTags.data]);
   return(
     <div>
       <div>
           <h3>Lägg till en tagg</h3>
           <input id="add-title-input" type="text" value={Tag} onChange={(e)=>{setTag(e.target.value)}} autoComplete="off" />
-          <button type="button" onClick={()=>{setTags(prev => [...prev, Tag]); linkTags(user.token, {"blogpostID": postid, "tags": [Tag]})}}>Lägg till tagg</button>
+          <button type="button" onClick={async()=>{setTags(prev => [...prev, Tag]); await linkTags(user.token, {"blogpostID": postid, "tags": [Tag]})}}>Lägg till tagg</button>
       </div>
       <div>
         {
           Tags.map((tag, index)=>(
             <div key={index} className="flex-row align-center">
               <p>{tag}</p>
-              <button type="button" id="delete-tag-button" onClick={()=>{
-                unlinkTags(user.token, {"blogpostID": postid, "tags": [tag]})
+              <button type="button" id="delete-tag-button" onClick={async ()=>{
+                await unlinkTags(user.token, {"blogpostID": postid, "tags": [tag]})
             }}>x</button></div>
           ))
         }

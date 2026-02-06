@@ -133,7 +133,12 @@ function DisplayEditUserFields({UserId, allPeopleRequest}){
             <input type="text" name="isblockedreason" id="" value={IsBlocked} autoComplete="off" onChange={(e)=>{setIsBlocked(e.target.value)}}/>
 
             <button className="button-style" onClick={async ()=>{
-                await editPerson(user.token, UserId, {"username": UserName, "passwordhash": sha256(Password), "name": Name, "email": Mail, "phonenumber": TelNumber, "employeenumber": EmployeeNumber, "admin": IsAdmin, "blocked": IsBlocked == "" ? null : IsBlocked})
+                if(Password == ""){
+                    await editPerson(user.token, UserId, {"username": UserName, "name": Name, "email": Mail, "phonenumber": TelNumber, "employeenumber": EmployeeNumber, "admin": IsAdmin, "blocked": IsBlocked == "" ? null : IsBlocked})
+                }
+                else{
+                    await editPerson(user.token, UserId, {"username": UserName, "passwordhash": sha256(Password), "name": Name, "email": Mail, "phonenumber": TelNumber, "employeenumber": EmployeeNumber, "admin": IsAdmin, "blocked": IsBlocked == "" ? null : IsBlocked})
+                }
                 allPeopleRequest.refetch()
                 UserId = 0
                 }}>Spara ändringar</button>

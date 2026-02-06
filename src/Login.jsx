@@ -22,6 +22,7 @@ function Login({userInfo, setUserInfo}){
 
     return (
         <div id="login-page-container" className="align-center justify-center">
+            <button id="back-arrow-button" onClick={()=>{navigate(-1)}}>←</button>
             <div id="login-input-container" className="flex-column align-center justify-around">
                 <h1 id="login-header">Logga in</h1>
                 <div id="login-inputfield-container" className='flex-column justify-around'>

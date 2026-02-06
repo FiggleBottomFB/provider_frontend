@@ -60,6 +60,7 @@
 #wiki-display-container::-webkit-scrollbar {
     width: 8px;
     margin: 100px;
+    display: none;
 }
 #wiki-display-container::-webkit-scrollbar-track {
     background: #f1f1f1;
@@ -72,6 +73,7 @@
 #page-display-container::-webkit-scrollbar {
     width: 8px;
     margin: 100px;
+    display: none;
 }
 #page-display-container::-webkit-scrollbar-track {
     background: #f1f1f1;
