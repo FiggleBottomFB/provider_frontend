@@ -35,7 +35,7 @@ function HomeHeader(){
 
                     <nav id="header-route-link-container">
                     <NavLink to="/wiki" className="header-route-link">Wiki</NavLink>
-                    <NavLink to="/blog" className="header-route-link">Blog</NavLink>
+                    <NavLink to="/blog" className="header-route-link">Blogg</NavLink>
                     <NavLink to="/calendar" className="header-route-link">Kalender</NavLink>
                     <DisplayAdminPanelButton />
                     </nav>
