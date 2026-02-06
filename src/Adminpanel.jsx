@@ -43,7 +43,7 @@ function Displayadduser(){
                 <label htmlFor="isadmincheckbox">Är admin</label>
                 <input type="checkbox" name="isadmincheckbox" id="" onChange={()=>{setIsAdmin(!IsAdmin)}} />
 
-                <button className="button-style" onClick={()=>{addPerson(user.token, {"username": UserName, "passwordhash": sha256(Password), "name": Name, "email": Mail, "phonenumber": TelNumber, "employeenumber": EmployeeNumber, "admin": IsAdmin})}}>Skapa användare</button>
+                <button className="button-style" onClick={async ()=>{await addPerson(user.token, {"username": UserName, "passwordhash": sha256(Password), "name": Name, "email": Mail, "phonenumber": TelNumber, "employeenumber": EmployeeNumber, "admin": IsAdmin})}}>Skapa användare</button>
             </div>
             )}
         </div>
@@ -132,8 +132,8 @@ function DisplayEditUserFields({UserId, allPeopleRequest}){
             <label htmlFor="isblockedreason">Anledning till att vara blockad</label>
             <input type="text" name="isblockedreason" id="" value={IsBlocked} autoComplete="off" onChange={(e)=>{setIsBlocked(e.target.value)}}/>
 
-            <button className="button-style" onClick={()=>{
-                editPerson(user.token, UserId, {"username": UserName, "passwordhash": sha256(Password), "name": Name, "email": Mail, "phonenumber": TelNumber, "employeenumber": EmployeeNumber, "admin": IsAdmin, "blocked": IsBlocked == "" ? null : IsBlocked})
+            <button className="button-style" onClick={async ()=>{
+                await editPerson(user.token, UserId, {"username": UserName, "passwordhash": sha256(Password), "name": Name, "email": Mail, "phonenumber": TelNumber, "employeenumber": EmployeeNumber, "admin": IsAdmin, "blocked": IsBlocked == "" ? null : IsBlocked})
                 allPeopleRequest.refetch()
                 UserId = 0
                 }}>Spara ändringar</button>
