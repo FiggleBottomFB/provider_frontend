@@ -14,7 +14,8 @@ function DisplayBlogPosts({}){
     const blogid = params.blogid
     const {user} = useAuth();
     const navigate = useNavigate()
-
+    const [OffsetCount, setOffsetCount] = useState(1)
+    const [Posts, setPosts] = useState([])
 
     /*BLOG*/
 
@@ -23,19 +24,16 @@ function DisplayBlogPosts({}){
     };
     
     const blogRequest = useApi(fetchBlog, [user, blogid], !!user);
-    
     /*POST*/
 
     const fetchPosts = async ({ signal }) => {
         return await getBlogPosts(user.token, blogid,"", signal);
     };
         
-        const postRequest = useApi(fetchPosts, [user, blogid], !!user);
-        //postRequest.data.post
-
+    const postRequest = useApi(fetchPosts, [user, blogid], !!user);
+    //postRequest.data.post
 
     if (blogRequest.loading || blogRequest.error) return <LoadingAndErrorHandler Loading={blogRequest.loading} Error={blogRequest.error} />
-
     return(
         <div id="blog-full-container">
             <div id="latest-posts-container">
@@ -44,6 +42,12 @@ function DisplayBlogPosts({}){
                 <BlogTitle title={blogRequest?.data.fields.title}/>
                 <BlogPostsContainer postRequest={postRequest}/>
             </div>
+            {/* <button onClick={async ()=>{
+                setOffsetCount(OffsetCount + 1)
+                const latestWikiPages = await getBlogPosts(user.token, blogid, "&limit="+(4*OffsetCount))
+                setPosts(latestWikiPages.posts)
+                console.log(latestWikiPages)
+            }}>Hämta fler sidor</button> */}
         </div>
     )
 }
@@ -56,7 +60,7 @@ function AddBlogPostButton({blogid}){
         navigate("../addpost/"+blogid)
       }}>Gör ett inlägg</button>
     )
-  }
+}
   
 
 function BlogTitle({title}){
@@ -69,7 +73,6 @@ function BlogTitle({title}){
 function BlogPostsContainer({postRequest}){
     const {user} = useAuth();
     const navigate = useNavigate()
-
 
 
   if (postRequest.loading || postRequest.error) return <LoadingAndErrorHandler Loading={postRequest.loading} Error={postRequest.error} />
@@ -89,7 +92,7 @@ function BlogPostsContainer({postRequest}){
                 </div>
                 <div id="blog-buttons-container" className="flex-column justify-around">
                     <button className="handle-blogpost-button" onClick={()=>{navigate(".././blog/edit/"+post.id)}}>Redigera</button>
-                    <button className="handle-blogpost-button" onClick={()=>{deleteBlogPost(user?.token, post.id)}}>Ta bort</button>
+                    <button className="handle-blogpost-button" onClick={async ()=>{await deleteBlogPost(user?.token, post.id); postRequest.refetch()}}>Ta bort</button>
                 </div>
             </div>
         ))
@@ -133,7 +136,7 @@ function SearchTags(){
                         </div>
                     ))
                 }
-                </div>
+            </div>
         </div>
     )
 }

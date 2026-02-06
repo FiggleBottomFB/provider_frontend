@@ -41,7 +41,7 @@ function DisplayEditContainer() {
       description,
       public: isPublic,
     });
-
+    console.log(isPublic)
     navigate(-1);
   };
 

@@ -14,8 +14,8 @@ function DisplayAddContainer({Title, setTitle, Content, setContent}){
     const [Tag, setTag] = useState("")
 
     return(
-        <div>
-            <button onClick={()=>{navigate(-1)}}>←</button>
+        <div id="add-wikipage-full-container">
+            <button id="back-arrow-button" onClick={()=>{navigate(-1)}}>←</button>
             <div id="add-blog-input-container" className="flex-column align-center">
                 <h3>Titel</h3>
                 <input id="add-title-input" type="text" value={Title} onChange={(e)=>{setTitle(e.target.value)}} autoComplete="off" />

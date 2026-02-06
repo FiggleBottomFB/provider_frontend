@@ -24,7 +24,7 @@ function DisplayBlogPosts({blogid, ShowBlogPost, setShowBlogPost, postid, setpos
     };
     const postRequest = useApi(fetchPosts, [blogid]);
     if (blogRequest.loading || blogRequest.error) return <LoadingAndErrorHandler Loading={blogRequest.loading} Error={blogRequest.error} />
-
+    console.log(blogRequest.data)
     return(
         <div id="blog-full-container">
             <div id="latest-posts-container">
@@ -125,6 +125,7 @@ function Home(){
         if(!allPublicBlogs.data){
             return
         }
+        // console.log(allPublicBlogs.data)
         return(
             <div id="public-blogs-container">
                 {
@@ -146,21 +147,38 @@ function Home(){
             </div>
         )
     }
-    return (
-        <div id="home-container" className="align-center justify-around flex-row">
-            <NavLink to="/wiki" className="home-route-link">
-                <div className='justify-center align-center home-route-link-text-container'>Wiki</div>
-            </NavLink>
+    else{
+        const fethAllPublic = async ({ signal }) => {
+            return await getAllBlogs(user.token,"",signal)
+        }
+        
+        const allPublicBlogs = useApi(fethAllPublic);
 
-            <NavLink to="/blog" className="home-route-link">
-                <div className='justify-center align-center home-route-link-text-container'>Blog</div>
-            </NavLink>
-
-            <NavLink to="/calendar" className="home-route-link">
-                <div className='justify-center align-center home-route-link-text-container'>Kalender</div>
-            </NavLink>
-        </div>
-    )
+        if(!allPublicBlogs.data){
+            return
+        }
+        // console.log(allPublicBlogs.data)
+        return(
+            <div id="public-blogs-container">
+                {
+                    ShowBlogMenu && (allPublicBlogs.data.blogs.map((blog, index)=>(
+                        <div key={index} className='flex-row'>
+                            <div id="blog-display-container" onClick={()=>{setShowBlog(!ShowBlog); setblogid(blog.id); setShowBlogMenu(!ShowBlogMenu)}}>
+                                <h1>{blog.title}</h1>
+                                <p>{blog.description}</p>
+                            </div>
+                        </div>
+                    )))
+                }
+                {
+                    ShowBlog && (<DisplayBlogPosts blogid={blogid} ShowBlogPost={ShowBlogPost} setShowBlogPost={setShowBlogPost} postid={postid} setpostid={setpostid} ShowBlog={ShowBlog} setShowBlog={setShowBlog} setShowBlogMenu={setShowBlogMenu} ShowBlogMenu={ShowBlogMenu}/>)
+                }
+                {
+                    ShowBlogPost && (<DisplayBlogPost postid={postid} setpostid={setpostid} ShowBlogPost={ShowBlogPost} setShowBlogPost={setShowBlogPost} ShowBlog={ShowBlog} setShowBlog={setShowBlog}/>)
+                }
+            </div>
+        )
+    }
 }
 
 export default Home

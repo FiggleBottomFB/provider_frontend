@@ -26,7 +26,7 @@ function DisplayEditContainer({Wiki, setWiki, Title, setTitle, Description, setD
     fetchWiki()
   }, [])
   return(
-    <div>
+    <div id="edit-wiki-full-container">
       <button id="back-arrow-button" onClick={()=>{navigate(-1)}}>←</button>
       <div id="edit-post-input-container" className="align-center flex-column">
         <input id="edit-post-title-input" type="text" value={Title} onChange={(e) => {setTitle(e.target.value)}} autoComplete="off"/>

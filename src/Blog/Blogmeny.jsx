@@ -9,34 +9,9 @@ import LoadingAndErrorHandler from '../LoadingAndErrorhandler';
 import Spinner from '../spinnertest';
 
 
-//ADMIN ONLY MOVE AWAY FROMHERE
-function DisplayBlogButton(){
-    const navigate = useNavigate()
-    const {user} = useAuth()
-    useEffect(()=>{
-        const fetchBlogs = async () =>{
-            const verifyAlreadyHaveBlog = await getAllBlogs(user.token)
-            const { user } = useAuth()
-            verifyAlreadyHaveBlog.array.forEach(blog => {
-                if(blog.id == user.id){
-                    return
-                }
-            });
-        }
-        // fetchBlogs()
-    }, [])
-
-    return(
-        <div>
-            <button onClick={()=>{navigate("add")}}>Skapa en blogg</button>
-        </div>
-    )
-}
 
 
-
-
-function DisplayBlogs({LatestBlogs}){
+function DisplayBlogs({LatestBlogs, blogRequest}){
     const navigate = useNavigate()
     const {user}= useAuth()
 
@@ -50,7 +25,7 @@ function DisplayBlogs({LatestBlogs}){
                     </div>
                     <div id="blog-buttons-container" className="flex-column justify-around">
                         <button className="handle-blog-button" onClick={()=>{navigate("edit/"+blog.id)}}>Redigera</button>
-                        <button className="handle-blog-button" onClick={()=>{deleteBlog(user.token, blog.id)}}>Ta bort</button>
+                        <button className="handle-blog-button" onClick={async ()=>{await deleteBlog(user.token, blog.id); blogRequest.refetch()}}>Ta bort</button>
                     </div>
                 </div>
             ))}
@@ -73,11 +48,11 @@ function Blogmeny(){
 
 
    if (blogRequest.loading || blogRequest.error) return <LoadingAndErrorHandler Loading={blogRequest.loading} Error={blogRequest.error} />
-
+console.log(blogRequest)
     return (
         <div>
             {/* <DisplayBlogButton /> */}
-            <DisplayBlogs LatestBlogs={blogRequest.data.blogs} />
+            <DisplayBlogs LatestBlogs={blogRequest.data.blogs} blogRequest={blogRequest} />
         </div>
     )
 }

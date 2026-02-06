@@ -23,6 +23,8 @@ async function apiFetch(path, options = {}) {
 
   // console.log(JSON.stringify(body))
   // console.log(path)
+  console.log(personToken)
+  console.log(method)
 
   const res = await fetch(API_BASE + path, {
     method,
@@ -30,7 +32,6 @@ async function apiFetch(path, options = {}) {
     signal,
     body: body ? (isFormData ? body : JSON.stringify(body)) : undefined,
   });
-
 
   return await res.json();
 }

@@ -30,7 +30,7 @@ function DisplayEditContainer({WikiPage, setWikiPage, Title, setTitle, Content, 
 
 
   return(
-    <div>
+    <div id="edit-wikipage-full-container">
       <button id="back-arrow-button" onClick={()=>{navigate(-1)}}>←</button>
       <div id="edit-page-input-container" className="align-center flex-column">
         <input id="edit-page-title-input" type="text" value={Title} onChange={(e) => {setTitle(e.target.value)}} autoComplete="off"/>

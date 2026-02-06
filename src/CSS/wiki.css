@@ -183,3 +183,7 @@
 #search-tags-input:focus{
     outline: none;
 }
+
+#add-wikipage-full-container{
+    margin-top: 15vh;
+}

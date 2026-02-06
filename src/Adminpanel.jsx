@@ -74,15 +74,12 @@ function DisplayEditUser(){
                     </div>
                 ))
             }
-            <DisplayEditUserFields UserId={UserId} allPeopleRequest={allPeopleRequest}/>
+            { UserId != 0 && (<DisplayEditUserFields UserId={UserId} allPeopleRequest={allPeopleRequest}/>)}
         </div>
     )
 }
 
 function DisplayEditUserFields({UserId, allPeopleRequest}){
-    if(UserId == 0){
-        return
-    }
     const {user} = useAuth()
     const [UserName, setUserName] = useState("")
     const [Password, setPassword] = useState("")
@@ -108,7 +105,7 @@ function DisplayEditUserFields({UserId, allPeopleRequest}){
             setTelNumber(editUserInfo.data.fields.phonenumber)
             setIsAdmin(editUserInfo.data.fields.admin)
             setIsBlocked(editUserInfo.data.fields.blocked)
-            if(!IsBlocked){
+            if(!editUserInfo.data.fields.blocked){
                 setIsBlocked("")
             }
         }

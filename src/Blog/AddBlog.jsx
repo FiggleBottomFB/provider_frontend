@@ -10,6 +10,8 @@ function DisplayAddContainer({Title, setTitle, Description, setDescription}){
     const [AllPeople, setAllPeople] = useState([])
     const [PersonId, setPersonId] = useState(0)
     const [ChosenName, setChosenName] = useState("")
+    const [IsPublic, setIsPublic] = useState(false)
+    const navigate = useNavigate()
 
     useEffect(()=>{
         const fetchAllPeople = async ()=>{
@@ -20,7 +22,7 @@ function DisplayAddContainer({Title, setTitle, Description, setDescription}){
         }
         fetchAllPeople()
     }, [])
-
+    console.log(PersonId, Title, Description, IsPublic)
     return(
 
         <div id="add-blog-full-container" className="justify-center">
@@ -31,7 +33,9 @@ function DisplayAddContainer({Title, setTitle, Description, setDescription}){
                     <input id="add-title-input" type="text" value={Title} onChange={(e)=>{setTitle(e.target.value)}} autoComplete="off" />
                     <h3>Beskrivning</h3>
                     <textarea name="" id="add-description-input" value={Description} onChange={(e)=>{setDescription(e.target.value)}} rows={15} cols={100} ></textarea>
-                    <button id="add-blog-post-button" onClick={()=>{addBlog(user.token, user.id, {"title": Title, "description": Description})}}>Skapa blogg</button>
+                    <p>Publik</p>
+                    <input type="checkbox" checked={IsPublic} onChange={()=>{setIsPublic(!IsPublic)}}/>
+                    <button id="add-blog-post-button" onClick={()=>{addBlog(user.token, PersonId, {"title": Title, "description": Description, "public": IsPublic}); navigate(-1)}}>Skapa blogg</button>
                 </div>
                 <div id="choose-person-container" className="flex-column">
                     {
